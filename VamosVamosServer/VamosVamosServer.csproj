@@ -19,7 +19,10 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
+      <Folder Include="DAO\" />
       <Folder Include="Model\" />
+      <Folder Include="Service\" />
+      <Folder Include="WebSocket\" />
     </ItemGroup>
 
 </Project>

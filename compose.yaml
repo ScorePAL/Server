@@ -1,6 +1,46 @@
-﻿services:
+﻿version: '3.8'
+
+services:
+  # Ton serveur principal
   vamosvamosserver:
     image: vamosvamosserver
     build:
       context: .
       dockerfile: VamosVamosServer/Dockerfile
+    ports:
+      - "8080:8080" # Expose le port 8080 pour ton serveur
+      - "8081:8081" # Expose le port 8081 pour l'interface Mongo-Express
+    depends_on:
+      - mongodb # Assure que MongoDB est prêt avant de démarrer le serveur
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/vamosvamosdb # URI pour connecter le serveur à MongoDB
+
+  # Service MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017" # Expose le port MongoDB pour un accès externe (optionnel)
+    volumes:
+      - mongodb_data:/data/db # Stockage persistant pour les données MongoDB
+
+  # Interface Mongo-Express
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "3000:3000" # Interface Mongo-Express disponible sur http://localhost:3000
+    depends_on:
+      - mongodb
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb # Nom du service MongoDB
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=password
+
+volumes:
+  mongodb_data:
+    driver: local
