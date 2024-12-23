@@ -1,0 +1,6 @@
+﻿services:
+  vamosvamosserver:
+    image: vamosvamosserver
+    build:
+      context: .
+      dockerfile: VamosVamosServer/Dockerfile
