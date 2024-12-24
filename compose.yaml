@@ -24,7 +24,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.httpChallenge.entryPoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=xxxx"
+      - "--certificatesresolvers.myresolver.acme.email=sacha.laurent71@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/etc/traefik/acme.json"
     ports:
       - "80:80"
@@ -37,14 +37,14 @@ services:
   db:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: xxx
+      MYSQL_ROOT_PASSWORD: root_password
 
   phpmyadmin:
     image: phpmyadmin
     environment:
       PMA_ARBITRARY: 1
     ports:
-      - "9090:80"
+      - "9090:81"
 
 networks:
   web:

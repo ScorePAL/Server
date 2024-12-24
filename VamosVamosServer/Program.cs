@@ -1,6 +1,10 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
+using VamosVamosServer.DAO.Implementation;
+using VamosVamosServer.DAO.Interfaces;
+using VamosVamosServer.Service.Implementation;
+using VamosVamosServer.Service.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -11,6 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
+builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<IMatchDAO, MatchDAO>();
 
 var app = builder.Build();
 
