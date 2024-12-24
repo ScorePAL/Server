@@ -3,8 +3,6 @@ using System.Net.WebSockets;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:5001");
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -17,8 +15,11 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 
