@@ -1,6 +1,5 @@
 using System.Data;
 using MySqlConnector;
-using MySqlConnectionStringBuilder = MySql.Data.MySqlClient.MySqlConnectionStringBuilder;
 
 namespace VamosVamosServer.DAO;
 
@@ -14,16 +13,15 @@ public class MySQLController : IDisposable
     /// </summary>
     public MySQLController()
     {
-        string connectionString = new MySqlConnectionStringBuilder()
+        string connectionString = new MySqlConnectionStringBuilder
         {
-            Server = "172.18.0.3:3306",
+            Server = "172.18.0.3",
             UserID = "root",
             Password = "root_password",
-            Database = "vamosvamos"
+            Database = "VamosVamos",
         }.ConnectionString;
 
-        connection = new MySqlConnection();
-        connection.ConnectionString = connectionString;
+        connection = new MySqlConnection(connectionString);
     }
 
     /// <summary>
