@@ -1,67 +1,68 @@
 using System.Net;
 using System.Net.WebSockets;
-using System.Text;
 using VamosVamosServer.DAO.Implementation;
 using VamosVamosServer.DAO.Interfaces;
 using VamosVamosServer.Service.Implementation;
 using VamosVamosServer.Service.Interfaces;
+using WebSocketManager = VamosVamosServer.WebSockets.WebSocketManager;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
 
+// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
+builder.Services.AddSingleton<WebSocketManager>(); // Singleton pour un seul WebSocketManager global
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IMatchDAO, MatchDAO>();
 
 var app = builder.Build();
 
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger Configuration
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-
 app.UseAuthorization();
 
-app.MapControllers();
-
+// Middleware WebSocket
 app.UseWebSockets();
 app.Map("/ws", async context =>
 {
     if (context.WebSockets.IsWebSocketRequest)
     {
-        using var ws = await context.WebSockets.AcceptWebSocketAsync();
-        while (true)
-        {
-            var message = "The current time is " + DateTime.Now.ToString("HH:mm:ss");
-            var bytes = Encoding.UTF8.GetBytes(message);
-            var buffer = new ArraySegment<byte>(bytes, 0, bytes.Length);
-            if (ws.State == WebSocketState.Open)
-            {
-                await ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-            }
-            else
-            {
-                break;
-            }
+        // Récupérer le WebSocketManager injecté
+        var webSocketManager = app.Services.GetRequiredService<WebSocketManager>();
 
-            await Task.Delay(1000);
+        var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+        webSocketManager.AddSocket(webSocket);
+
+        // Garder la connexion active tant que le WebSocket est ouvert
+        while (webSocket.State == WebSocketState.Open)
+        {
+            // Lire les messages si nécessaire
+            var buffer = new byte[1024 * 4];
+            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+            if (result.MessageType == WebSocketMessageType.Close)
+            {
+                break; // Terminer la connexion
+            }
         }
+
+        // Nettoyer après déconnexion
+        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
     }
     else
     {
-        context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
     }
 });
+
+// Mapping des contrôleurs REST&
+app.MapControllers();
 
 await app.RunAsync();

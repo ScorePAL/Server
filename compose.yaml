@@ -1,11 +1,9 @@
-﻿version: '3.7'
-
-services:
+﻿services:
   # Ton serveur principal
   vamosvamosserver:
     build:
-        context: ./VamosVamosServer
-        dockerfile: Dockerfile
+      context: ./VamosVamosServer
+      dockerfile: Dockerfile
     container_name: api
     labels:
       - "traefik.http.routers.api.rule=Host(`localhost`)"
@@ -14,6 +12,8 @@ services:
       - web
     depends_on:
       - db
+    ports:
+      - "8080:8080"
 
   reverse-proxy:
     image: traefik:v2.9
@@ -38,13 +38,16 @@ services:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin
     environment:
       PMA_ARBITRARY: 1
+      PMA_HOST: "172.18.0.2"
     ports:
-      - "9090:81"
+      - "8082:80"
 
 networks:
   web:
