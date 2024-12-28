@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using VamosVamosServer.Model.MatchModel;
 using VamosVamosServer.Service.Interfaces;
 using WebSocketManager = VamosVamosServer.WebSockets.WebSocketManager;
 
@@ -17,9 +18,9 @@ public class MatchController
     }
 
     [HttpPost("update-score")]
-    public async Task<IActionResult> UpdateScore(int matchId, int scoreTeam1, int scoreTeam2)
+    public async Task<IActionResult> UpdateScore(string token, int matchId, int scoreTeam1, int scoreTeam2)
     {
-        service.UpdateMatchScore(matchId, scoreTeam1, scoreTeam2);
+        service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
         await webSocketManager.BroadcastMessageAsync("updateScore", new Dictionary<string, dynamic>
         {
             ["matchId"] = matchId,
@@ -27,5 +28,17 @@ public class MatchController
             ["scoreTeam2"] = scoreTeam2
         });
         return new OkResult();
+    }
+
+    [HttpGet]
+    public Match GetMatch(string token, int matchId)
+    {
+        return service.GetMatch(token, matchId);
+    }
+
+    [HttpGet("all")]
+    public List<Match> GetAllMatches(string token, int page = 1, int limit = 10)
+    {
+        return service.GetAllMatches(token, page, limit);
     }
 }
