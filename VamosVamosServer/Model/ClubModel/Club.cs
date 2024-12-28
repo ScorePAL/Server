@@ -4,32 +4,32 @@ namespace VamosVamosServer.Model.ClubModel;
 
 public class Club : IClub
 {
-    private int _id;
-    private String _name;
-    private String _logoUrl;
-    private List<ITeam> _teams;
+    private int id;
+    private String name;
+    private String logoUrl;
+    private List<ITeam> teams;
 
     public String LogoUrl
     {
-        get => _logoUrl;
-        set => _logoUrl = value;
+        get => logoUrl;
+        set => logoUrl = value;
     }
 
     public String Name
     {
-        get => _name;
-        set => _name = value;
+        get => name;
+        set => name = value;
     }
 
     public int Id
     {
-        get => _id;
-        set => _id = value;
+        get => id;
+        set => id = value;
     }
 
     public List<ITeam> Teams
     {
-        get => _teams;
-        set => _teams = value;
+        get => teams;
+        set => teams = value;
     }
 }

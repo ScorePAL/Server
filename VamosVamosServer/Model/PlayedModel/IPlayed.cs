@@ -17,7 +17,7 @@ public interface IPlayed
     bool RedCard { get; set; }
     bool IsInjured { get; set; }
     bool IsCaptain { get; set; }
-    Position Position { get; set; }
+    List<Position> Positions { get; set; }
     List<IPenalty> Penalties { get; set; }
     List<IAssist> Assists { get; set; }
     IPlayer Player { get; set; }

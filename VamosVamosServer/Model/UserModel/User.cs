@@ -5,40 +5,46 @@ namespace VamosVamosServer.Model.User;
 
 public class User
 {
-    private int _id;
-    private String _firstName;
-    private String _lastName;
-    private Role _role;
-    private DateTime _createdAt;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private Role role;
+    private DateTime createdAt;
     private IClub relatedTo;
 
     public int Id
     {
-        get => _id;
-        set => _id = value;
+        get => id;
+        set => id = value;
     }
 
     public String FirstName
     {
-        get => _firstName;
-        set => _firstName = value;
+        get => firstName;
+        set => firstName = value;
     }
 
     public String LastName
     {
-        get => _lastName;
-        set => _lastName = value;
+        get => lastName;
+        set => lastName = value;
     }
 
     public Role Role
     {
-        get => _role;
-        set => _role = value;
+        get => role;
+        set => role = value;
     }
 
     public DateTime CreatedAt
     {
-        get => _createdAt;
-        set => _createdAt = value;
+        get => createdAt;
+        set => createdAt = value;
+    }
+
+    public IClub RelatedTo
+    {
+        get => relatedTo;
+        set => relatedTo = value;
     }
 }

@@ -2,6 +2,7 @@ namespace VamosVamosServer.Model.PlayedModel;
 
 public class Assist : IAssist
 {
+    private int id;
     private AssistType assistType = AssistType.Pass;
     private int assistTime;
     private Played played;

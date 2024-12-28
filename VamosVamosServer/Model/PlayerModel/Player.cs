@@ -4,46 +4,46 @@ namespace VamosVamosServer.Model.Player;
 
 public class Player : IPlayer
 {
-    private int _id;
-    private String _firstName;
-    private String _lastName;
-    private DateTime _birthDate;
-    private Position[] _positions;
-    private List<IPlayed> _played;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private DateTime birthDate;
+    private Position[] positions;
+    private List<IPlayed> played;
 
     public int Id
     {
-        get => _id;
-        set => _id = value;
+        get => id;
+        set => id = value;
     }
 
     public String FirstName
     {
-        get => _firstName;
-        set => _firstName = value;
+        get => firstName;
+        set => firstName = value;
     }
 
     public String LastName
     {
-        get => _lastName;
-        set => _lastName = value;
+        get => lastName;
+        set => lastName = value;
     }
 
     public DateTime BirthDate
     {
-        get => _birthDate;
-        set => _birthDate = value;
+        get => birthDate;
+        set => birthDate = value;
     }
 
     public Position[] Positions
     {
-        get => _positions;
-        set => _positions = value;
+        get => positions;
+        set => positions = value;
     }
 
     public List<IPlayed> Played
     {
-        get => _played;
-        set => _played = value;
+        get => played;
+        set => played = value;
     }
 }

@@ -15,8 +15,12 @@ builder.Services.AddSwaggerGen();
 
 // Dependency Injection
 builder.Services.AddSingleton<WebSocketManager>(); // Singleton pour un seul WebSocketManager global
+
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IMatchDAO, MatchDAO>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserDAO, UserDAO>();
 
 var app = builder.Build();
 

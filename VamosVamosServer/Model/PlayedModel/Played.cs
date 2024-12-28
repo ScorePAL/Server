@@ -6,7 +6,7 @@ namespace VamosVamosServer.Model.PlayedModel;
 public class Played : IPlayed
 {
     private int id;
-    private Position position;
+    private List<Position> positions;
     private bool isCaptain;
     private bool isInjured;
     private bool redCard;
@@ -47,10 +47,10 @@ public class Played : IPlayed
         set => player = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public Position Position
+    public List<Position> Positions
     {
-        get => position;
-        set => position = value;
+        get => positions;
+        set => positions = value;
     }
 
     public bool IsCaptain
