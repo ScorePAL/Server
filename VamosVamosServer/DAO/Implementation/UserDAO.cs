@@ -130,4 +130,30 @@ public class UserDAO : IUserDAO
 
         return new OkObjectResult(new Tuple<string, string>(token, refreshToken));
     }
+
+    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    {
+        using var conn = new MySQLController();
+        var result = conn.ExecuteQuery(
+            "SELECT user_id FROM user_tokens WHERE refresh_token=@refreshToken",
+            new Dictionary<string, object>
+            {
+                { "@refreshToken", refreshtoken }
+            });
+
+        if (result.Rows.Count == 0) return new BadRequestObjectResult("Token invalide.");
+
+        string token = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", new DateTime(0, 4, 0));
+        string refreshToken = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", new DateTime(0, 5, 0));
+        conn.ExecuteQuery("UPDATE user_tokens SET token=@token, refresh_token=@refreshToken WHERE refresh_token=@previousRefreshToken AND user_id=@id",
+            new Dictionary<string, object>
+            {
+                { "@token", token },
+                { "@refreshToken", refreshToken },
+                { "@previousRefreshToken", refreshtoken },
+                { "@id", Convert.ToInt32(result.Rows[0]["user_id"]) }
+            });
+
+        return new OkObjectResult(new Tuple<string, string>(token, refreshToken));
+    }
 }

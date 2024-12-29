@@ -30,4 +30,11 @@ public interface IUserService
     /// <param name="password">The user's password</param>
     /// <returns></returns>
     public ActionResult<Tuple<string, string>> LoginUser(string email, string password);
+
+    /// <summary>
+    /// Generate a new token for the user
+    /// </summary>
+    /// <param name="refreshtoken">The refresh token of the user</param>
+    /// <returns></returns>
+    ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken);
 }

@@ -30,4 +30,10 @@ public class UserController
     {
         return service.LoginUser(email, password);
     }
+
+    [HttpGet("new-token")]
+    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    {
+        return service.GenerateNewToken(refreshtoken);
+    }
 }

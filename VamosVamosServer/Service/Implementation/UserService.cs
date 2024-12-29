@@ -27,4 +27,9 @@ public class UserService : IUserService
     {
         return dao.LoginUser(email, password);
     }
+
+    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    {
+        return dao.GenerateNewToken(refreshtoken);
+    }
 }
