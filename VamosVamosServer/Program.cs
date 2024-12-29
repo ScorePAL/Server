@@ -41,8 +41,11 @@ app.Map("/ws", async context =>
         // Récupérer le WebSocketManager injecté
         var webSocketManager = app.Services.GetRequiredService<WebSocketManager>();
 
+        // Recevoir l'id du club
+        var clubId = int.Parse(context.Request.Query["clubId"]);
+
         var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-        webSocketManager.AddSocket(webSocket);
+        webSocketManager.AddSocket(clubId, webSocket);
 
         // Garder la connexion active tant que le WebSocket est ouvert
         while (webSocket.State == WebSocketState.Open)

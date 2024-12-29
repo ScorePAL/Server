@@ -20,14 +20,25 @@ public class MatchController
     [HttpPost("update-score")]
     public async Task<IActionResult> UpdateScore(string token, int matchId, int scoreTeam1, int scoreTeam2)
     {
-        service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
-        await webSocketManager.BroadcastMessageAsync("updateScore", new Dictionary<string, dynamic>
+        var result = service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
+        if (result is OkObjectResult)
         {
-            ["matchId"] = matchId,
-            ["scoreTeam1"] = scoreTeam1,
-            ["scoreTeam2"] = scoreTeam2
-        });
-        return new OkResult();
+            var response = (OkObjectResult) result;
+            var clubs = (List<int>) response.Value!;
+
+            foreach (var club in clubs)
+            {
+                await webSocketManager.BroadcastMessageAsync(club, "updateScore", new Dictionary<string, dynamic>
+                {
+                    ["matchId"] = matchId,
+                    ["scoreTeam1"] = scoreTeam1,
+                    ["scoreTeam2"] = scoreTeam2
+                });
+            }
+
+
+        }
+        return result;
     }
 
     [HttpGet]

@@ -7,20 +7,25 @@ namespace VamosVamosServer.WebSockets;
 
 public class WebSocketManager
 {
-    private readonly List<WebSocket> _sockets = new();
-    private readonly object _lock = new();
+    private readonly Dictionary<int, List<WebSocket>> socketsByClubId = new();
+    private readonly object @lock = new();
 
-    public void AddSocket(WebSocket socket)
+    public void AddSocket(int clubId, WebSocket socket)
     {
-        lock (_lock)
+        lock (@lock)
         {
-            _sockets.Add(socket);
+            if (socketsByClubId.ContainsKey(clubId) == false)
+            {
+                socketsByClubId[clubId] = new List<WebSocket>();
+            }
+
+            socketsByClubId[clubId].Add(socket);
         }
     }
 
-    public async Task BroadcastMessageAsync(string title, Dictionary<string, dynamic> body)
+    public Task BroadcastMessageAsync(int clubId, string title, Dictionary<string, dynamic> body)
     {
-        lock (_lock)
+        lock (@lock)
         {
             JsonObject json = new()
             {
@@ -31,7 +36,7 @@ public class WebSocketManager
             var buffer = Encoding.UTF8.GetBytes(json.ToString());
             var toRemove = new List<WebSocket>();
 
-            foreach (var socket in _sockets)
+            foreach (var socket in socketsByClubId[clubId])
             {
                 if (socket.State == WebSocketState.Open)
                 {
@@ -53,8 +58,10 @@ public class WebSocketManager
             // Retirer les sockets fermés ou en erreur
             foreach (var socket in toRemove)
             {
-                _sockets.Remove(socket);
+                socketsByClubId[clubId].Remove(socket);
             }
         }
+
+        return Task.CompletedTask;
     }
 }
