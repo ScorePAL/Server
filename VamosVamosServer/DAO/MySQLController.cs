@@ -15,10 +15,10 @@ public class MySQLController : IDisposable
     {
         string connectionString = new MySqlConnectionStringBuilder
         {
-            Server = "172.18.0.3",
+            Server = "172.18.0.2",
             UserID = "root",
             Password = "root_password",
-            Database = "VamosVamos",
+            Database = "VamosVamos"
         }.ConnectionString;
 
         connection = new MySqlConnection(connectionString);
