@@ -13,14 +13,14 @@ public class UserController
         this.service = service;
     }
 
-    [HttpGet]
+    [HttpGet("{token}")]
     public ActionResult GetUserByToken(string token)
     {
         return service.GetUserByToken(token);
     }
 
     [HttpPost("register")]
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, int clubId)
+    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
     {
         return service.RegisterUser(firstName, lastName, email, password, clubId);
     }

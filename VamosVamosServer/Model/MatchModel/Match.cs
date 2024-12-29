@@ -6,7 +6,7 @@ namespace VamosVamosServer.Model.MatchModel;
 
 public class Match : IMatch
 {
-    private int id;
+    private long id;
     private ITeam team1;
     private ITeam team2;
     private DateTime date;
@@ -15,12 +15,12 @@ public class Match : IMatch
     private bool isHome;
     private MatchState state;
     private DateTime startedTime;
-    private int score1;
-    private int score2;
+    private long score1;
+    private long score2;
     private List<MatchHistory> history = new();
     private List<IPlayed> lineup = new();
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;
@@ -74,13 +74,13 @@ public class Match : IMatch
         set => startedTime = value;
     }
 
-    public int Score1
+    public long Score1
     {
         get => score1;
         set => score1 = value;
     }
 
-    public int Score2
+    public long Score2
     {
         get => score2;
         set => score2 = value;

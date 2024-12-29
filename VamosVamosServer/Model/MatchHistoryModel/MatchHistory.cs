@@ -4,7 +4,7 @@ namespace VamosVamosServer.Model.MatchHistoryModel;
 
 public class MatchHistory
 {
-    public MatchHistory(int time, string additionnalInformations, IMatch match)
+    public MatchHistory(long time, string additionnalInformations, IMatch match)
     {
         this.time = time;
         this.additionnalInformations = additionnalInformations;
@@ -12,7 +12,7 @@ public class MatchHistory
     }
 
     private MatchEvent e;
-    private int time;
+    private long time;
     private String additionnalInformations;
     private IMatch match;
 
@@ -22,7 +22,7 @@ public class MatchHistory
         set => e = value;
     }
 
-    public int Time
+    public long Time
     {
         get => time;
         set => time = value;

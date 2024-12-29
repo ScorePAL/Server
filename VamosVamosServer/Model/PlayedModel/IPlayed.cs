@@ -5,14 +5,14 @@ namespace VamosVamosServer.Model.PlayedModel;
 
 public interface IPlayed
 {
-    int Id { get; set; }
-    int JerseyNumber { get; set; }
-    int EntryTime { get; set; }
-    int ExitTime { get; set; }
-    int Goals { get; set; }
-    int BlockedShots { get; set; }
-    int OnTargetShots { get; set; }
-    int OffTargetShots { get; set; }
+    long Id { get; set; }
+    long JerseyNumber { get; set; }
+    long EntryTime { get; set; }
+    long ExitTime { get; set; }
+    long Goals { get; set; }
+    long BlockedShots { get; set; }
+    long OnTargetShots { get; set; }
+    long OffTargetShots { get; set; }
     bool YellowCard { get; set; }
     bool RedCard { get; set; }
     bool IsInjured { get; set; }

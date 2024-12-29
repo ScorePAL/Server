@@ -14,17 +14,17 @@ public class MatchService : IMatchService
         this.dao = dao;
     }
 
-    public ActionResult UpdateMatchScore(string token, int matchId, int scoreTeam1, int scoreTeam2)
+    public ActionResult UpdateMatchScore(string token, long matchId, long scoreTeam1, long scoreTeam2)
     {
         return dao.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
     }
 
-    public ActionResult<Match?> GetMatch(string token, int matchId)
+    public ActionResult<Match?> GetMatch(string token, long matchId)
     {
         return dao.GetMatch(token, matchId);
     }
 
-    public ActionResult<List<Match>> GetAllMatches(string token, int page, int limit)
+    public ActionResult<List<Match>> GetAllMatches(string token, long page, long limit)
     {
         return dao.GetAllMatches(token, page, limit);
     }

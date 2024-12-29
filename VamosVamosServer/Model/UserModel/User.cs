@@ -5,14 +5,14 @@ namespace VamosVamosServer.Model.User;
 
 public class User
 {
-    private int id;
+    private long id;
     private String firstName;
     private String lastName;
     private Role role;
     private DateTime createdAt;
     private IClub relatedTo;
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;

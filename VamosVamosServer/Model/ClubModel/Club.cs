@@ -4,7 +4,7 @@ namespace VamosVamosServer.Model.ClubModel;
 
 public class Club : IClub
 {
-    private int id;
+    private long id;
     private String name;
     private String logoUrl;
     private List<ITeam> teams;
@@ -21,7 +21,7 @@ public class Club : IClub
         set => name = value;
     }
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;

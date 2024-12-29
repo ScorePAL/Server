@@ -6,12 +6,12 @@ namespace VamosVamosServer.Model.Team;
 
 public class Team : ITeam
 {
-    private int id;
+    private long id;
     private String name;
     private IClub club;
     private List<IMatch> matches;
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;

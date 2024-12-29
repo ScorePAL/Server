@@ -4,7 +4,7 @@ namespace VamosVamosServer.Model.ClubModel;
 
 public interface IClub
 {
-    int Id { get; set; }
+    long Id { get; set; }
     String Name { get; set; }
     String LogoUrl { get; set; }
 

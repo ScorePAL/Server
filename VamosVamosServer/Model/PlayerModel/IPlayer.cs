@@ -5,7 +5,7 @@ namespace VamosVamosServer.Model.Player;
 
 public interface IPlayer
 {
-    int Id { get; set; }
+    long Id { get; set; }
     String FirstName { get; set; }
     String LastName { get; set; }
     DateTime BirthDate { get; set; }

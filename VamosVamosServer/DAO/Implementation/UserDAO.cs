@@ -51,7 +51,7 @@ public class UserDAO : IUserDAO
         return new OkObjectResult(user);
     }
 
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, int clubId)
+    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
     {
         using (var conn = new MySQLController())
         {

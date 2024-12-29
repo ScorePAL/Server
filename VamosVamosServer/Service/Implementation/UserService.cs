@@ -18,7 +18,7 @@ public class UserService : IUserService
         return dao.GetUserByToken(token);
     }
 
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, int clubId)
+    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
     {
         return dao.RegisterUser(firstName, lastName, email, password, clubId);
     }

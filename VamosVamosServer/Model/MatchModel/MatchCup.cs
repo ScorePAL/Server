@@ -45,7 +45,7 @@ public class MatchCup : IMatch
         set => match.Address = value;
     }
 
-    public int Score2
+    public long Score2
     {
         get => match.Score2;
         set => match.Score2 = value;
@@ -63,13 +63,13 @@ public class MatchCup : IMatch
         set => match.Team2 = value;
     }
 
-    public int Score1
+    public long Score1
     {
         get => match.Score1;
         set => match.Score1 = value;
     }
 
-    public int Id
+    public long Id
     {
         get => match.Id;
         set => match.Id = value;

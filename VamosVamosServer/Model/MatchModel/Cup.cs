@@ -2,12 +2,12 @@ namespace VamosVamosServer.Model.MatchModel;
 
 public class Cup
 {
-    private int id;
+    private long id;
     private String name;
     private Scale scale;
     private List<MatchCup> matches;
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;

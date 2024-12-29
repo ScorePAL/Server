@@ -4,14 +4,14 @@ namespace VamosVamosServer.Model.Player;
 
 public class Player : IPlayer
 {
-    private int id;
+    private long id;
     private String firstName;
     private String lastName;
     private DateTime birthDate;
     private Position[] positions;
     private List<IPlayed> played;
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;

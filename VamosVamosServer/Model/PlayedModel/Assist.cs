@@ -2,9 +2,9 @@ namespace VamosVamosServer.Model.PlayedModel;
 
 public class Assist : IAssist
 {
-    private int id;
+    private long id;
     private AssistType assistType = AssistType.Pass;
-    private int assistTime;
+    private long assistTime;
     private Played played;
     private Played assistedPlayed;
 
@@ -20,7 +20,7 @@ public class Assist : IAssist
         set => assistType = value;
     }
 
-    public int AssistTime
+    public long AssistTime
     {
         get => assistTime;
         set => assistTime = value;

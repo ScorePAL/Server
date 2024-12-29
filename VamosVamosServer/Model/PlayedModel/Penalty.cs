@@ -4,7 +4,7 @@ public class Penalty : IPenalty
 {
     private PenaltyObtainingMethod obtainingMethod;
     private PenaltyResult result;
-    private int penaltyTime;
+    private long penaltyTime;
     private Played played;
 
     public PenaltyObtainingMethod ObtainingMethod
@@ -19,7 +19,7 @@ public class Penalty : IPenalty
         set => result = value;
     }
 
-    public int PenaltyTime
+    public long PenaltyTime
     {
         get => penaltyTime;
         set => penaltyTime = value;

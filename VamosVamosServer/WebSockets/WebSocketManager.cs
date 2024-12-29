@@ -7,10 +7,10 @@ namespace VamosVamosServer.WebSockets;
 
 public class WebSocketManager
 {
-    private readonly Dictionary<int, List<WebSocket>> socketsByClubId = new();
+    private readonly Dictionary<long, List<WebSocket>> socketsByClubId = new();
     private readonly object @lock = new();
 
-    public void AddSocket(int clubId, WebSocket socket)
+    public void AddSocket(long clubId, WebSocket socket)
     {
         lock (@lock)
         {
@@ -23,7 +23,7 @@ public class WebSocketManager
         }
     }
 
-    public Task BroadcastMessageAsync(int clubId, string title, Dictionary<string, dynamic> body)
+    public Task BroadcastMessageAsync(long clubId, string title, Dictionary<string, dynamic> body)
     {
         lock (@lock)
         {

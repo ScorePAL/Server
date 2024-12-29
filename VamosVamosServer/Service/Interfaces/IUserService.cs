@@ -21,7 +21,7 @@ public interface IUserService
     /// <param name="password">The password of the user</param>
     /// <param name="clubId">The club id of the user</param>
     /// <returns></returns>
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, int clubId);
+    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId);
 
     /// <summary>
     /// Make the user login

@@ -5,19 +5,19 @@ namespace VamosVamosServer.Model.PlayedModel;
 
 public class Played : IPlayed
 {
-    private int id;
+    private long id;
     private List<Position> positions;
     private bool isCaptain;
     private bool isInjured;
     private bool redCard;
     private bool yellowCard;
-    private int offTargetShots;
-    private int onTargetShots;
-    private int blockedShots;
-    private int goals;
-    private int exitTime;
-    private int entryTime;
-    private int jerseyNumber;
+    private long offTargetShots;
+    private long onTargetShots;
+    private long blockedShots;
+    private long goals;
+    private long exitTime;
+    private long entryTime;
+    private long jerseyNumber;
     private List<IPenalty> penalties = new();
     private List<IAssist> assists = new();
     private IPlayer player;
@@ -77,49 +77,49 @@ public class Played : IPlayed
         set => yellowCard = value;
     }
 
-    public int OffTargetShots
+    public long OffTargetShots
     {
         get => offTargetShots;
         set => offTargetShots = value;
     }
 
-    public int OnTargetShots
+    public long OnTargetShots
     {
         get => onTargetShots;
         set => onTargetShots = value;
     }
 
-    public int BlockedShots
+    public long BlockedShots
     {
         get => blockedShots;
         set => blockedShots = value;
     }
 
-    public int Goals
+    public long Goals
     {
         get => goals;
         set => goals = value;
     }
 
-    public int ExitTime
+    public long ExitTime
     {
         get => exitTime;
         set => exitTime = value;
     }
 
-    public int EntryTime
+    public long EntryTime
     {
         get => entryTime;
         set => entryTime = value;
     }
 
-    public int JerseyNumber
+    public long JerseyNumber
     {
         get => jerseyNumber;
         set => jerseyNumber = value;
     }
 
-    public int Id
+    public long Id
     {
         get => id;
         set => id = value;

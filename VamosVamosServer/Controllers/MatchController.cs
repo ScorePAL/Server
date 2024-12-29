@@ -18,7 +18,7 @@ public class MatchController
     }
 
     [HttpPost("update-score")]
-    public async Task<IActionResult> UpdateScore(string token, int matchId, int scoreTeam1, int scoreTeam2)
+    public async Task<IActionResult> UpdateScore(string token, long matchId, long scoreTeam1, long scoreTeam2)
     {
         var result = service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
         if (result is OkObjectResult)
@@ -41,14 +41,14 @@ public class MatchController
         return result;
     }
 
-    [HttpGet]
-    public ActionResult<Match?> GetMatch(string token, int matchId)
+    [HttpGet("{matchId}")]
+    public ActionResult<Match?> GetMatch(string token, long matchId)
     {
         return service.GetMatch(token, matchId);
     }
 
     [HttpGet("all")]
-    public ActionResult<List<Match>> GetAllMatches(string token, int page = 1, int limit = 10)
+    public ActionResult<List<Match>> GetAllMatches(string token, long page = 1, long limit = 10)
     {
         return service.GetAllMatches(token, page, limit);
     }
