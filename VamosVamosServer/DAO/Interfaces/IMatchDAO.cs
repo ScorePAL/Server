@@ -30,4 +30,12 @@ public interface IMatchDAO
     /// <param name="limit">The number of matches per page</param>
     /// <returns>All the matches of the page</returns>
     ActionResult<List<Match>> GetAllMatches(string token, long page, long limit);
+
+    /// <summary>
+    /// Create a match in the database.
+    /// </summary>
+    /// <param name="token">The user's token</param>
+    /// <param name="match">The match to insert into the database</param>
+    /// <returns></returns>
+    ActionResult<long> CreateMatch(string token, Match match);
 }

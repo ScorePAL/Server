@@ -28,4 +28,9 @@ public class MatchService : IMatchService
     {
         return dao.GetAllMatches(token, page, limit);
     }
+
+    public ActionResult<long> CreateMatch(string token, Match match)
+    {
+        return dao.CreateMatch(token, match);
+    }
 }

@@ -30,4 +30,12 @@ public interface IMatchService
     /// <param name="limit">The number of matches per page</param>
     /// <returns>All the matches of the page</returns>
     ActionResult<List<Match>> GetAllMatches(string token, long page, long limit);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="match"></param>
+    /// <returns></returns>
+    ActionResult<long> CreateMatch(string token, Match match);
 }

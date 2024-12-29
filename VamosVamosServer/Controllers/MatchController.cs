@@ -52,4 +52,10 @@ public class MatchController
     {
         return service.GetAllMatches(token, page, limit);
     }
+
+    [HttpPost("create")]
+    public ActionResult<long> CreateMatch(string token, [FromBody] Match match)
+    {
+        return service.CreateMatch(token, match);
+    }
 }
