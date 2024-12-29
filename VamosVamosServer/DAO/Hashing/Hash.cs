@@ -23,7 +23,7 @@ public class Hash
         return algorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
     }
 
-    public static string GenerateJwtToken(string username)
+    public static string GenerateJwtToken(string username, DateTime duration)
     {
         var claims = new[]
         {
@@ -38,7 +38,7 @@ public class Hash
             issuer: "S3_A2_LesPloucs",
             audience: "S3_A2_LesPloucs",
             claims: claims,
-            expires: DateTime.Now.AddMonths(1),
+            expires: DateTime.Now.AddMonths(duration.Month).AddDays(duration.Day),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

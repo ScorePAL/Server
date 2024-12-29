@@ -23,7 +23,7 @@ public class UserService : IUserService
         return dao.RegisterUser(firstName, lastName, email, password, clubId);
     }
 
-    public ActionResult LoginUser(string email, string password)
+    public ActionResult<Tuple<string, string>> LoginUser(string email, string password)
     {
         return dao.LoginUser(email, password);
     }

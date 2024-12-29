@@ -29,5 +29,5 @@ public interface IUserService
     /// <param name="email">The user's email</param>
     /// <param name="password">The user's password</param>
     /// <returns></returns>
-    public ActionResult LoginUser(string email, string password);
+    public ActionResult<Tuple<string, string>> LoginUser(string email, string password);
 }

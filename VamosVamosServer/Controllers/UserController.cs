@@ -26,7 +26,7 @@ public class UserController
     }
 
     [HttpPost("login")]
-    public ActionResult LoginUser(string email, string password)
+    public ActionResult<Tuple<string, string>> LoginUser(string email, string password)
     {
         return service.LoginUser(email, password);
     }
