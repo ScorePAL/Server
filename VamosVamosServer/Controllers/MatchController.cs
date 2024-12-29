@@ -31,13 +31,13 @@ public class MatchController
     }
 
     [HttpGet]
-    public Match GetMatch(string token, int matchId)
+    public ActionResult<Match?> GetMatch(string token, int matchId)
     {
         return service.GetMatch(token, matchId);
     }
 
     [HttpGet("all")]
-    public List<Match> GetAllMatches(string token, int page = 1, int limit = 10)
+    public ActionResult<List<Match>> GetAllMatches(string token, int page = 1, int limit = 10)
     {
         return service.GetAllMatches(token, page, limit);
     }

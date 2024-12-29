@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using VamosVamosServer.DAO.Interfaces;
 using VamosVamosServer.Model.MatchModel;
 using VamosVamosServer.Service.Interfaces;
@@ -18,12 +19,12 @@ public class MatchService : IMatchService
         dao.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
     }
 
-    public Match GetMatch(string token, int matchId)
+    public ActionResult<Match?> GetMatch(string token, int matchId)
     {
         return dao.GetMatch(token, matchId);
     }
 
-    public List<Match> GetAllMatches(string token, int page, int limit)
+    public ActionResult<List<Match>> GetAllMatches(string token, int page, int limit)
     {
         return dao.GetAllMatches(token, page, limit);
     }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using VamosVamosServer.Model.MatchModel;
 
 namespace VamosVamosServer.Service.Interfaces;
@@ -19,7 +20,7 @@ public interface IMatchService
     /// <param name="token">The user's token</param>
     /// <param name="matchId">The match id</param>
     /// <returns>The match</returns>
-    Match GetMatch(string token, int matchId);
+    ActionResult<Match?> GetMatch(string token, int matchId);
 
     /// <summary>
     /// Get all matches by page.
@@ -28,5 +29,5 @@ public interface IMatchService
     /// <param name="page">The page number</param>
     /// <param name="limit">The number of matches per page</param>
     /// <returns>All the matches of the page</returns>
-    List<Match> GetAllMatches(string token, int page, int limit);
+    ActionResult<List<Match>> GetAllMatches(string token, int page, int limit);
 }
