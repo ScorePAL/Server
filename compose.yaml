@@ -1,43 +1,28 @@
 ﻿services:
-  # Ton serveur principal
-  vamosvamosserver:
+  api_vamosvamos:
     build:
       context: ./VamosVamosServer
       dockerfile: Dockerfile
-    container_name: api
-    labels:
-      - "traefik.http.routers.api.rule=Host(`localhost`)"
-      - "traefik.http.services.api.loadbalancer.server.port=8080"
+    container_name: api_vamosvamos
     networks:
       - web
     depends_on:
       - db
     ports:
       - "8080:8080"
-
-  reverse-proxy:
-    image: traefik:v2.9
-    container_name: reverse-proxy
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.httpChallenge.entryPoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=sacha.laurent71@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/etc/traefik/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    networks:
-      - web
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=root_password
+      - DB_NAME=VamosVamos
 
   db:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root_password
+    networks:
+      - web
     ports:
       - "3306:3306"
 
@@ -45,9 +30,11 @@
     image: phpmyadmin
     environment:
       PMA_ARBITRARY: 1
-      PMA_HOST: "172.18.0.2"
+      PMA_HOST: db
     ports:
       - "8082:80"
+    networks:
+      - web
 
 networks:
   web:

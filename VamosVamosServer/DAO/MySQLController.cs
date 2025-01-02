@@ -3,7 +3,7 @@ using MySqlConnector;
 
 namespace VamosVamosServer.DAO;
 
-public class MySQLController : IDisposable
+public class MySqlController : IDisposable
 {
     //Connection
     private MySqlConnection connection;
@@ -11,14 +11,15 @@ public class MySQLController : IDisposable
     /// <summary>
     /// Création de la connection
     /// </summary>
-    public MySQLController()
+    public MySqlController()
     {
         string connectionString = new MySqlConnectionStringBuilder
         {
-            Server = "172.18.0.2",
-            UserID = "root",
-            Password = "root_password",
-            Database = "VamosVamos"
+            Server = Environment.GetEnvironmentVariable("DB_HOST"),
+            UserID = Environment.GetEnvironmentVariable("DB_USER"),
+            Password = Environment.GetEnvironmentVariable("DB_PASSWORD"),
+            Database = Environment.GetEnvironmentVariable("DB_NAME"),
+            Port = uint.Parse(Environment.GetEnvironmentVariable("DB_PORT") ?? throw new InvalidOperationException())
         }.ConnectionString;
 
         connection = new MySqlConnection(connectionString);
@@ -69,7 +70,7 @@ public class MySQLController : IDisposable
 
         using (MySqlCommand command = connection.CreateCommand())
         {
-            command.CommandText = query + "; SELECT last_insert_rowid();";
+            command.CommandText = query + "; SELECT LAST_INSERT_ID();";
             if (parameters != null)
             {
                 foreach (var parameter in parameters)
