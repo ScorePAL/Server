@@ -10,6 +10,20 @@ public class WebSocketManager
     private readonly Dictionary<long, List<WebSocket>> socketsByClubId = new();
     private readonly object @lock = new();
 
+    public void RemoveSocket(long clubId, WebSocket socket)
+    {
+        lock (@lock)
+        {
+            if (socketsByClubId.ContainsKey(clubId))
+            {
+                if (socketsByClubId[clubId].Contains(socket))
+                {
+                    socketsByClubId[clubId].Remove(socket);
+                }
+            }
+        }
+    }
+
     public void AddSocket(long clubId, WebSocket socket)
     {
         lock (@lock)

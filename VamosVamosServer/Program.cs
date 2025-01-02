@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.WebSockets;
+using System.Text;
 using VamosVamosServer.DAO.Implementation;
 using VamosVamosServer.DAO.Interfaces;
 using VamosVamosServer.Service.Implementation;
@@ -28,40 +29,63 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthorization();
 
-// Middleware WebSocket
 app.UseWebSockets();
 app.Map("/ws", async context =>
 {
     if (context.WebSockets.IsWebSocketRequest)
     {
-        // Récupérer le WebSocketManager injecté
         var webSocketManager = app.Services.GetRequiredService<WebSocketManager>();
 
-        // Recevoir l'id du club
-        var clubId = int.Parse(context.Request.Query["clubId"]);
+        // Vérifier et récupérer le clubId
+        if (!int.TryParse(context.Request.Query["clubId"], out var clubId))
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await context.Response.WriteAsync("Invalid clubId");
+            return;
+        }
 
         var webSocket = await context.WebSockets.AcceptWebSocketAsync();
         webSocketManager.AddSocket(clubId, webSocket);
 
-        // Garder la connexion active tant que le WebSocket est ouvert
-        while (webSocket.State == WebSocketState.Open)
+        try
         {
-            // Lire les messages si nécessaire
             var buffer = new byte[1024 * 4];
-            var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-            if (result.MessageType == WebSocketMessageType.Close)
+            while (webSocket.State == WebSocketState.Open)
             {
-                break; // Terminer la connexion
+                // Recevoir des messages
+                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    break;
+                }
+
+                if (result.MessageType == WebSocketMessageType.Text)
+                {
+                    var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                    Console.WriteLine($"Message reçu de club {clubId}: {message}");
+
+                    // Vous pouvez traiter ou répondre au client ici
+                }
             }
         }
-
-        // Nettoyer après déconnexion
-        await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur WebSocket pour club {clubId}: {ex.Message}");
+        }
+        finally
+        {
+            webSocketManager.RemoveSocket(clubId, webSocket); // Supprimer après déconnexion
+            await webSocket.CloseAsync(
+                WebSocketCloseStatus.NormalClosure,
+                "Closing",
+                CancellationToken.None
+                );
+        }
     }
     else
     {
