@@ -119,7 +119,6 @@ public class UserDAO : IUserDAO
         }
 
         string token = Hash.GenerateJwtToken(email, 120);
-        Console.WriteLine(token.Length);
         string refreshToken = Hash.GenerateJwtToken(email, 150);
         conn.ExecuteInsert("INSERT INTO user_tokens (user_id, token, refresh_token) VALUES (@id, @token, @refreshToken)",
             new Dictionary<string, object>

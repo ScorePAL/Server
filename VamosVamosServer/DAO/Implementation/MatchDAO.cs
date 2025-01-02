@@ -20,6 +20,8 @@ public class MatchDAO : IMatchDAO
         }
 
         OkObjectResult user = (OkObjectResult)r;
+
+        OkObjectResult clubs;
         if (user.Value != null)
         {
             User u = (User)user.Value;
@@ -27,7 +29,11 @@ public class MatchDAO : IMatchDAO
             using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(
-                    "SELECT t1.club_id, t2.club_id FROM `match` m INNER JOIN team t1 on t1.team_id = m.team1_id INNER JOIN team t2 on t2.team_id = m.team2_id WHERE m.match_id = @matchId",
+                    "SELECT t1.club_id as 't1.club_id', t2.club_id as 't2.club_id' " +
+                    "FROM `match` m " +
+                    "INNER JOIN team t1 on t1.team_id = m.team1_id " +
+                    "INNER JOIN team t2 on t2.team_id = m.team2_id " +
+                    "WHERE m.match_id = @matchId",
                     new Dictionary<string, object>
                     {
                         { "@matchId", matchId }
@@ -39,15 +45,18 @@ public class MatchDAO : IMatchDAO
                     return new NotFoundObjectResult("Match not found.");
                 }
 
-                if (Convert.ToInt64(result.Rows[0]["t1.club_id"]) != u.RelatedTo.Id &&
-                    Convert.ToInt64(result.Rows[0]["t2.club_id"]) != u.RelatedTo.Id &&
+                long team1ClubId = Convert.ToInt64(result.Rows[0]["t1.club_id"]);
+                long team2ClubId = Convert.ToInt64(result.Rows[0]["t2.club_id"]);
+
+                if (team1ClubId != u.RelatedTo.Id &&
+                    team2ClubId != u.RelatedTo.Id &&
                     u.Role != Role.Admin)
                 {
                     return new UnauthorizedResult();
                 }
 
                 conn.ExecuteQuery(
-                    "UPDATE match SET score_team1 = @scoreTeam1, score_team2 = @scoreTeam2 WHERE id = @matchId",
+                    "UPDATE `match` SET score_team1 = @scoreTeam1, score_team2 = @scoreTeam2 WHERE match_id = @matchId",
                     new Dictionary<string, object>
                     {
                         { "@scoreTeam1", scoreTeam1 },
@@ -55,10 +64,20 @@ public class MatchDAO : IMatchDAO
                         { "@matchId", matchId }
                     }
                 );
+
+                clubs = new OkObjectResult(new List<long>
+                {
+                    team1ClubId,
+                    team2ClubId
+                });
             }
         }
+        else
+        {
+            return new UnauthorizedResult();
+        }
 
-        return new OkResult();
+        return clubs;
     }
 
     public ActionResult<Match?> GetMatch(string token, long matchId)
@@ -72,7 +91,7 @@ public class MatchDAO : IMatchDAO
 
 
         Match? match = null;
-        OkObjectResult user = (OkObjectResult) r;
+        OkObjectResult user = (OkObjectResult)r;
         if (user.Value != null)
         {
             User u = (User)user.Value;
@@ -280,7 +299,8 @@ public class MatchDAO : IMatchDAO
             }
 
             matchId = conn.ExecuteInsert(
-                "INSERT INTO `match` (team1_id, team2_id, date, address, coach, is_home, match_state, started_time, score_team1, score_team2) " +
+                "INSERT INTO `match` " +
+                "(team1_id, team2_id, date, address, coach, is_home, match_state, started_time, score_team1, score_team2) " +
                 "VALUES (@team1Id, @team2Id, @date, @address, @coach, @isHome, @matchState, @startedTime, @scoreTeam1, @scoreTeam2)",
                 new Dictionary<string, object>
                 {

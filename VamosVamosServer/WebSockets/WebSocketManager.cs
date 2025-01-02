@@ -50,12 +50,18 @@ public class WebSocketManager
             var buffer = Encoding.UTF8.GetBytes(json.ToString());
             var toRemove = new List<WebSocket>();
 
+            if (socketsByClubId.ContainsKey(clubId) == false)
+            {
+                return Task.CompletedTask;
+            }
+
             foreach (var socket in socketsByClubId[clubId])
             {
                 if (socket.State == WebSocketState.Open)
                 {
                     try
                     {
+                        Console.WriteLine("Message envoyé !");
                         socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
                     }
                     catch

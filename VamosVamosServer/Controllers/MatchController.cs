@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using VamosVamosServer.Model.MatchModel;
 using VamosVamosServer.Service.Interfaces;
@@ -24,7 +25,7 @@ public class MatchController
         if (result is OkObjectResult)
         {
             var response = (OkObjectResult) result;
-            var clubs = (List<int>) response.Value!;
+            var clubs = (List<long>) response.Value!;
 
             foreach (var club in clubs)
             {
@@ -38,7 +39,7 @@ public class MatchController
 
 
         }
-        return result;
+        return result is OkObjectResult ? new OkResult() : result;
     }
 
     [HttpGet("{matchId}")]
