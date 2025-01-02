@@ -20,13 +20,13 @@ public class UserController
     }
 
     [HttpPost("register")]
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
+    public ActionResult RegisterUser(string firstName, string lastName, string email, [FromBody] string password, long clubId)
     {
         return service.RegisterUser(firstName, lastName, email, password, clubId);
     }
 
     [HttpPost("login")]
-    public ActionResult<Tuple<string, string>> LoginUser(string email, string password)
+    public ActionResult<Tuple<string, string>> LoginUser(string email, [FromBody] string password)
     {
         return service.LoginUser(email, password);
     }
