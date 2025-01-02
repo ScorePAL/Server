@@ -24,7 +24,7 @@ public class MatchDAO : IMatchDAO
         {
             User u = (User)user.Value;
 
-            using (MySQLController conn = new MySQLController())
+            using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(
                     "SELECT t1.club_id, t2.club_id FROM `match` m INNER JOIN team t1 on t1.team_id = m.team1_id INNER JOIN team t2 on t2.team_id = m.team2_id WHERE m.match_id = @matchId",
@@ -76,7 +76,7 @@ public class MatchDAO : IMatchDAO
         if (user.Value != null)
         {
             User u = (User)user.Value;
-            using (MySQLController conn = new MySQLController())
+            using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(
                     "SELECT * FROM `match` m " +
@@ -156,7 +156,7 @@ public class MatchDAO : IMatchDAO
         if (user.Value != null)
         {
             User u = (User)user.Value;
-            using (MySQLController conn = new MySQLController())
+            using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(
                     "SELECT * FROM `match` m " +
@@ -234,7 +234,7 @@ public class MatchDAO : IMatchDAO
 
         long matchId;
         User u = (User)user.Value;
-        using (MySQLController conn = new MySQLController())
+        using (MySqlController conn = new MySqlController())
         {
             bool canCreate = false;
 

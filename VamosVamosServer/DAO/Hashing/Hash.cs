@@ -9,6 +9,10 @@ namespace VamosVamosServer.Model.Hashing;
 
 public class Hash
 {
+    /// <summary>
+    /// Generate a salt for a user
+    /// </summary>
+    /// <returns></returns>
     public static string GenerateSalt()
     {
         var salt = new byte[32];
@@ -17,13 +21,24 @@ public class Hash
         return Convert.ToBase64String(salt);
     }
 
+    /// <summary>
+    /// Create a hash from a string
+    /// </summary>
+    /// <param name="text">The password to hash</param>
+    /// <returns>The hashed password</returns>
     public static byte[] HashPassword(string text)
     {
         HashAlgorithm algorithm = SHA256.Create();
         return algorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
     }
 
-    public static string GenerateJwtToken(string username, DateTime duration)
+    /// <summary>
+    /// Generate a JWT token for a user
+    /// </summary>
+    /// <param name="username">The user's username</param>
+    /// <param name="durationInDays">The duration of the token</param>
+    /// <returns>The token the was created</returns>
+    public static string GenerateJwtToken(string username, int durationInDays)
     {
         var claims = new[]
         {
@@ -38,7 +53,7 @@ public class Hash
             issuer: "S3_A2_LesPloucs",
             audience: "S3_A2_LesPloucs",
             claims: claims,
-            expires: DateTime.Now.AddMonths(duration.Month).AddDays(duration.Day),
+            expires: DateTime.Now.AddDays(durationInDays),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

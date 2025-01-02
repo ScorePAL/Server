@@ -23,7 +23,7 @@ public class TeamDAO : ITeamDAO
         OkObjectResult user = (OkObjectResult)r;
         if (user.Value != null)
         {
-            using (MySQLController conn = new MySQLController())
+            using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(
                     "SELECT team_id, team.name, club.club_id, club.name, logo_url FROM team INNER JOIN club on team.club_id = club.club_id LIMIT @limit OFFSET @offset",
@@ -70,7 +70,7 @@ public class TeamDAO : ITeamDAO
         }
 
         Team team;
-        using (MySQLController conn = new MySQLController())
+        using (MySqlController conn = new MySqlController())
         {
             var result = conn.ExecuteQuery(
                 "SELECT team_id, team.name as 'TeamName', club.club_id, club.name, logo_url FROM team INNER JOIN club on team.club_id = club.club_id WHERE team_id = @id",
@@ -124,7 +124,7 @@ public class TeamDAO : ITeamDAO
             return new UnauthorizedResult();
         }
 
-        using (MySQLController conn = new MySQLController())
+        using (MySqlController conn = new MySqlController())
         {
             conn.ExecuteQuery("INSERT INTO team (name, club_id) VALUES (@name, @clubId)", new Dictionary<string, object>
             {
@@ -153,7 +153,7 @@ public class TeamDAO : ITeamDAO
 
         User u = (User)user.Value;
 
-        using (MySQLController conn = new MySQLController())
+        using (MySqlController conn = new MySqlController())
         {
             var result = conn.ExecuteQuery("SELECT club_id FROM team WHERE team_id = @id", new Dictionary<string, object>
             {
@@ -199,7 +199,7 @@ public class TeamDAO : ITeamDAO
 
         User u = (User)user.Value;
 
-        using (MySQLController conn = new MySQLController())
+        using (MySqlController conn = new MySqlController())
         {
             var result = conn.ExecuteQuery("SELECT * FROM team WHERE team_id = @id", new Dictionary<string, object>
             {

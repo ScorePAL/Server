@@ -12,7 +12,7 @@ public class UserDAO : IUserDAO
     {
         User? user;
 
-        using var conn = new MySQLController();
+        using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT u.user_id, first_name, last_name, role, created_at, related_to, token, club_id, name, logo_url FROM users u INNER JOIN user_tokens ut on u.user_id = ut.user_id INNER JOIN VamosVamos.club c on u.related_to = c.club_id WHERE ut.token = @token",
             new Dictionary<string, object>
@@ -50,7 +50,7 @@ public class UserDAO : IUserDAO
 
     public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
     {
-        using var conn = new MySQLController();
+        using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT * FROM user_authentification WHERE email = @email",
             new Dictionary<string, object>
@@ -68,12 +68,13 @@ public class UserDAO : IUserDAO
         byte[] hashedPassword = Hash.HashPassword(password + salt);
 
         long userId = conn.ExecuteInsert(
-            "INSERT INTO users (first_name, last_name, role, related_to) VALUES (@firstName, @lastName, @role, @relatedTo)",
+            "INSERT INTO users (first_name, last_name, role, created_at, related_to) VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
             new Dictionary<string, object>
             {
                 { "@firstName", firstName },
                 { "@lastName", lastName },
                 { "@role", Role.Supporter.ToString() },
+                { "@createdAt", DateTime.Now },
                 { "@relatedTo", clubId }
             }
         );
@@ -93,7 +94,7 @@ public class UserDAO : IUserDAO
 
     public ActionResult<Tuple<String, String>> LoginUser(string email, string password)
     {
-        using var conn = new MySQLController();
+        using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT user_id, password, salt FROM user_authentification WHERE email = @email",
             new Dictionary<string, object>
@@ -117,8 +118,9 @@ public class UserDAO : IUserDAO
             return new BadRequestObjectResult("Mot de passe incorrect.");
         }
 
-        string token = Hash.GenerateJwtToken(email, new DateTime(0, 4, 0));
-        string refreshToken = Hash.GenerateJwtToken(email, new DateTime(0, 5, 0));
+        string token = Hash.GenerateJwtToken(email, 120);
+        Console.WriteLine(token.Length);
+        string refreshToken = Hash.GenerateJwtToken(email, 150);
         conn.ExecuteInsert("INSERT INTO user_tokens (user_id, token, refresh_token) VALUES (@id, @token, @refreshToken)",
             new Dictionary<string, object>
             {
@@ -133,7 +135,7 @@ public class UserDAO : IUserDAO
 
     public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
     {
-        using var conn = new MySQLController();
+        using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT user_id FROM user_tokens WHERE refresh_token=@refreshToken",
             new Dictionary<string, object>
@@ -143,8 +145,8 @@ public class UserDAO : IUserDAO
 
         if (result.Rows.Count == 0) return new BadRequestObjectResult("Token invalide.");
 
-        string token = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", new DateTime(0, 4, 0));
-        string refreshToken = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", new DateTime(0, 5, 0));
+        string token = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 120);
+        string refreshToken = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 150);
         conn.ExecuteQuery("UPDATE user_tokens SET token=@token, refresh_token=@refreshToken WHERE refresh_token=@previousRefreshToken AND user_id=@id",
             new Dictionary<string, object>
             {
