@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using VamosVamosServer.Model.MatchModel;
 using VamosVamosServer.Service.Interfaces;
-using WebSocketManager = VamosVamosServer.WebSockets.WebSocketManager;
 
 namespace VamosVamosServer.Controllers;
 
@@ -18,8 +17,8 @@ public class MatchController
         this.service = service;
     }
 
-    [HttpPost("update-score")]
-    public async Task<IActionResult> UpdateScore(string token, long matchId, long scoreTeam1, long scoreTeam2)
+    [HttpPut("update-score/{matchId}")]
+    public async Task<IActionResult> UpdateScore([FromBody] string token, long matchId, long scoreTeam1, long scoreTeam2)
     {
         var result = service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
         if (result is OkObjectResult)
@@ -27,35 +26,25 @@ public class MatchController
             var response = (OkObjectResult) result;
             var clubs = (List<long>) response.Value!;
 
-            foreach (var club in clubs)
-            {
-                await webSocketManager.BroadcastMessageAsync(club, "updateScore", new Dictionary<string, dynamic>
-                {
-                    ["matchId"] = matchId,
-                    ["scoreTeam1"] = scoreTeam1,
-                    ["scoreTeam2"] = scoreTeam2
-                });
-            }
-
-
+            // TODO: Notify all users that are concerned by the match
         }
         return result is OkObjectResult ? new OkResult() : result;
     }
 
     [HttpGet("{matchId}")]
-    public ActionResult<Match?> GetMatch(string token, long matchId)
+    public ActionResult<Match?> GetMatch([FromBody] string token, long matchId)
     {
         return service.GetMatch(token, matchId);
     }
 
     [HttpGet("all")]
-    public ActionResult<List<Match>> GetAllMatches(string token, long page = 1, long limit = 10)
+    public ActionResult<List<Match>> GetAllMatches([FromBody] string token, long page = 1, long limit = 10)
     {
         return service.GetAllMatches(token, page, limit);
     }
 
     [HttpPost("create")]
-    public ActionResult<long> CreateMatch(string token, [FromBody] Match match)
+    public ActionResult<long> CreateMatch([FromBody] string token, [FromBody] Match match)
     {
         return service.CreateMatch(token, match);
     }

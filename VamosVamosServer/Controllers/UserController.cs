@@ -32,7 +32,7 @@ public class UserController
     }
 
     [HttpGet("new-token")]
-    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    public ActionResult<Tuple<string, string>> GenerateNewToken([FromBody] string refreshtoken)
     {
         return service.GenerateNewToken(refreshtoken);
     }
