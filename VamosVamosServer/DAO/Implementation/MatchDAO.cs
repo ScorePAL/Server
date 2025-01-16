@@ -320,4 +320,76 @@ public class MatchDAO : IMatchDAO
 
         return new OkObjectResult(matchId);
     }
+
+    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    {
+        UserDAO userDao = new UserDAO();
+        ActionResult r = userDao.GetUserByToken(token);
+        if (r is not OkObjectResult)
+        {
+            return new UnauthorizedObjectResult(new List<Match>());
+        }
+
+        List<Match> matches = new List<Match>();
+        OkObjectResult user = (OkObjectResult)r;
+        if (user.Value != null)
+        {
+            User u = (User)user.Value;
+            using (MySqlController conn = new MySqlController())
+            {
+                var result = conn.ExecuteQuery(
+                    "SELECT DISTINCT(t1), DISTINCT(t2) FROM `match` m " +
+                    "INNER JOIN team t1 on m.team1_id = t1.team_id " +
+                    "INNER JOIN team t2 on m.team2_id = t2.team_id " +
+                    "INNER JOIN club c1 on t1.club_id = c1.club_id " +
+                    "INNER JOIN club c2 on t2.club_id = c2.club_id " +
+                    "WHERE t1.club_id = @clubId OR t2.club_id = @clubId " +
+                    "ORDER BY m.date DESC",
+                    new Dictionary<string, object>
+                    {
+                        { "@clubId", clubId }
+                    }
+                );
+
+                foreach (DataRow row in result.Rows)
+                {
+                    Match match = new Match
+                    {
+                        Id = Convert.ToInt32(row["id"]),
+                        Team1 = new Team
+                        {
+                            Id = Convert.ToInt32(row["team1_id"]),
+                            Name = row["t1.name"].ToString() ?? "",
+                            Club = new Club
+                            {
+                                Id = Convert.ToInt32(row["club1_id"]),
+                                Name = row["c1.name"].ToString() ?? ""
+                            }
+                        },
+                        Team2 = new Team
+                        {
+                            Id = Convert.ToInt32(row["team2_id"]),
+                            Name = row["t2.name"].ToString() ?? "",
+                            Club = new Club
+                            {
+                                Id = Convert.ToInt32(row["club2_id"]),
+                                Name = row["c2.name"].ToString() ?? ""
+                            }
+                        },
+                        Date = Convert.ToDateTime(row["date"]),
+                        Address = row["address"].ToString() ?? "",
+                        Coach = row["coach"].ToString() ?? "",
+                        IsHome = Convert.ToBoolean(row["is_home"]),
+                        State = (MatchState)Convert.ToInt32(row["match_state"]),
+                        StartedTime = Convert.ToDateTime(row["started_time"]),
+                        Score1 = Convert.ToInt32(row["score_team1"]),
+                        Score2 = Convert.ToInt32(row["score_team2"])
+                    };
+
+                    matches.Add(match);
+                }
+            }
+        }
+        return new OkObjectResult(matches);
+    }
 }

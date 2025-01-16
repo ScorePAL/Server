@@ -59,4 +59,10 @@ public class MatchController
     {
         return service.CreateMatch(token, match);
     }
+
+    [HttpGet("club/{clubId}")]
+    public ActionResult<List<Match>> GetClubMatches([FromBody] string token, long clubId)
+    {
+        return service.GetClubMatches(token, clubId);
+    }
 }

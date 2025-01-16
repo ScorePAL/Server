@@ -33,4 +33,9 @@ public class MatchService : IMatchService
     {
         return dao.CreateMatch(token, match);
     }
+
+    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    {
+        return dao.GetClubMatches(token, clubId);
+    }
 }

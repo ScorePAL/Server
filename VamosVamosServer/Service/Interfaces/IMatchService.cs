@@ -32,10 +32,18 @@ public interface IMatchService
     ActionResult<List<Match>> GetAllMatches(string token, long page, long limit);
 
     /// <summary>
-    /// 
+    /// Create a match in the database.
     /// </summary>
     /// <param name="token"></param>
     /// <param name="match"></param>
     /// <returns></returns>
     ActionResult<long> CreateMatch(string token, Match match);
+
+    /// <summary>
+    /// Returns the uppcoming matches of a club.
+    /// </summary>
+    /// <param name="token">The user's token</param>
+    /// <param name="clubId">The club's id</param>
+    /// <returns></returns>
+    ActionResult<List<Match>> GetClubMatches([FromBody] string token, long clubId);
 }
