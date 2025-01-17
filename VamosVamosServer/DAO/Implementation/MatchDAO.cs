@@ -10,7 +10,7 @@ namespace VamosVamosServer.DAO.Implementation;
 
 public class MatchDAO : IMatchDAO
 {
-    public ActionResult UpdateMatchScore(string token, long matchId, long scoreTeam1, long scoreTeam2)
+    public ActionResult UpdateMatchScore(string token, long matchId, int scoreTeam1, int scoreTeam2)
     {
         UserDAO userDao = new UserDAO();
         ActionResult r = userDao.GetUserByToken(token);
@@ -174,7 +174,6 @@ public class MatchDAO : IMatchDAO
         OkObjectResult user = (OkObjectResult)r;
         if (user.Value != null)
         {
-            User u = (User)user.Value;
             using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(
@@ -334,7 +333,6 @@ public class MatchDAO : IMatchDAO
         OkObjectResult user = (OkObjectResult)r;
         if (user.Value != null)
         {
-            User u = (User)user.Value;
             using (MySqlController conn = new MySqlController())
             {
                 var result = conn.ExecuteQuery(

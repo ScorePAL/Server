@@ -12,7 +12,7 @@ public interface IMatchService
     /// <param name="matchId">The match id</param>
     /// <param name="scoreTeam1">The new team1 score</param>
     /// <param name="scoreTeam2">The new team2 score</param>
-    ActionResult UpdateMatchScore(string token, long matchId, long scoreTeam1, long scoreTeam2);
+    ActionResult UpdateMatchScore(string token, long matchId, int scoreTeam1, int scoreTeam2);
 
     /// <summary>
     /// Get a match by its id.

@@ -14,7 +14,7 @@ public class MatchService : IMatchService
         this.dao = dao;
     }
 
-    public ActionResult UpdateMatchScore(string token, long matchId, long scoreTeam1, long scoreTeam2)
+    public ActionResult UpdateMatchScore(string token, long matchId, int scoreTeam1, int scoreTeam2)
     {
         return dao.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
     }

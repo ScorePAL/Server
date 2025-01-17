@@ -19,7 +19,7 @@ public class MatchController
     }
 
     [HttpPut("update-score/{matchId}")]
-    public async Task<IActionResult> UpdateScore([FromBody] string token, long matchId, long scoreTeam1, long scoreTeam2)
+    public async Task<IActionResult> UpdateScore([FromBody] string token, long matchId, int scoreTeam1, int scoreTeam2)
     {
         var result = service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
         if (result is OkObjectResult)
