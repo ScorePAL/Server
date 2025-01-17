@@ -1,11 +1,12 @@
-using System.Text.Json;
-using VamosVamosServer.Controllers;
 using VamosVamosServer.DAO.Implementation;
 using VamosVamosServer.DAO.Interfaces;
 using VamosVamosServer.Service.Implementation;
 using VamosVamosServer.Service.Interfaces;
+using VamosVamosServer.SSE;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<SSEController>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IMatchDAO, MatchDAO>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserDAO, UserDAO>();
 
+builder.Services.AddScoped<ICounterService, CounterService>();
+
 var app = builder.Build();
 
 // Swagger Configuration
@@ -30,21 +33,11 @@ app.UseSwaggerUI();
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthorization();
 
-app.MapGet("/", async (HttpContext ctx, ItemService service, CancellationToken ct) =>
+app.MapGet("/sse", async Task (HttpContext ctx, ICounterService service, CancellationToken token) =>
 {
-    ctx.Response.Headers.Add("Content-Type", "text/event-stream");
-
-    while (!ct.IsCancellationRequested)
-    {
-        var item = await service.WaitForNewItem();
-
-        await ctx.Response.WriteAsync($"data: ");
-        await JsonSerializer.SerializeAsync(ctx.Response.Body, item);
-        await ctx.Response.WriteAsync($"\n\n");
-        await ctx.Response.Body.FlushAsync();
-
-        service.Reset();
-    }
+    var controller = ctx.RequestServices.GetRequiredService<SSEController>();
+    controller.Subscribe(1, ctx, token);
+    await controller.SendMessage("test", 1);
 });
 
 // Mapping des contrôleurs REST&
