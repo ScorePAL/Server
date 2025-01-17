@@ -6,7 +6,6 @@ using VamosVamosServer.SSE;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<SSEController>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -14,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
-
+// Controllers, DAOs and Services
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IMatchDAO, MatchDAO>();
 
@@ -22,6 +21,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserDAO, UserDAO>();
 
 builder.Services.AddScoped<ICounterService, CounterService>();
+
+// SSE
+builder.Services.AddSingleton<IConnectionManager, ConnectionManager>();
+builder.Services.AddSingleton<IEventPublisher, SSEEventPublisher>();
 
 var app = builder.Build();
 
@@ -33,11 +36,14 @@ app.UseSwaggerUI();
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthorization();
 
-app.MapGet("/sse", async Task (HttpContext ctx, ICounterService service, CancellationToken token) =>
+app.MapGet("/sse", async (HttpContext ctx,
+    IConnectionManager connectionManager,
+    CancellationToken token,
+    long clubId) =>
 {
-    var controller = ctx.RequestServices.GetRequiredService<SSEController>();
-    controller.Subscribe(1, ctx, token);
-    await controller.SendMessage("test", 1);
+    await connectionManager.AddConnection(clubId, ctx, token);
+    // Keep connection alive until client disconnects
+    await Task.Delay(Timeout.Infinite, token);
 });
 
 // Mapping des contrôleurs REST&

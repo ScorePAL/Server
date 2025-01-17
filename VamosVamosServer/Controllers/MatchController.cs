@@ -1,21 +1,22 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using VamosVamosServer.Model.MatchHistoryModel;
 using VamosVamosServer.Model.MatchModel;
 using VamosVamosServer.Service.Interfaces;
 using VamosVamosServer.SSE;
+using VamosVamosServer.SSE.Events;
 
 namespace VamosVamosServer.Controllers;
 
 [Route("api/match")]
 public class MatchController
 {
-    private readonly SSEController sseController;
+    private readonly IEventPublisher eventPublisher;
     private readonly IMatchService service;
 
-    public MatchController(SSEController sseController, IMatchService service)
+    public MatchController(IEventPublisher eventPublisher, IMatchService matchService)
     {
-        this.sseController = sseController;
-        this.service = service;
+        this.eventPublisher = eventPublisher;
+        service = matchService;
     }
 
     [HttpPut("update-score/{matchId}")]
@@ -27,10 +28,7 @@ public class MatchController
             var response = (OkObjectResult) result;
             var clubs = (List<long>) response.Value!;
 
-            foreach (var clubId in clubs)
-            {
-                await sseController.SendMessage($"Match {matchId} updated", clubId);
-            }
+            await eventPublisher.PublishEvent(new ScoreUpdatedEvent(matchId, scoreTeam1, scoreTeam2), clubs);
         }
         return result is OkObjectResult ? new OkResult() : result;
     }
