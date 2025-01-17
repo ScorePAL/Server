@@ -2,18 +2,19 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using VamosVamosServer.Model.MatchModel;
 using VamosVamosServer.Service.Interfaces;
+using VamosVamosServer.SSE;
 
 namespace VamosVamosServer.Controllers;
 
 [Route("api/match")]
 public class MatchController
 {
-    private readonly WebSocketManager webSocketManager;
+    private readonly SSEController sseController;
     private readonly IMatchService service;
 
-    public MatchController(WebSocketManager webSocketManager, IMatchService service)
+    public MatchController(SSEController sseController, IMatchService service)
     {
-        this.webSocketManager = webSocketManager;
+        this.sseController = sseController;
         this.service = service;
     }
 
@@ -26,7 +27,10 @@ public class MatchController
             var response = (OkObjectResult) result;
             var clubs = (List<long>) response.Value!;
 
-            // TODO: Notify all users that are concerned by the match
+            foreach (var clubId in clubs)
+            {
+                await sseController.SendMessage($"Match {matchId} updated", clubId);
+            }
         }
         return result is OkObjectResult ? new OkResult() : result;
     }
