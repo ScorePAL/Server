@@ -1,9 +1,9 @@
 ﻿services:
-  api_vamosvamos:
+  api_scorepal:
     build:
-      context: ./VamosVamosServer
+      context: ./ScorePALServer
       dockerfile: Dockerfile
-    container_name: api_vamosvamos
+    container_name: api_scorepal
     networks:
       - web
     depends_on:
@@ -15,7 +15,7 @@
       - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=root_password
-      - DB_NAME=VamosVamos
+      - DB_NAME=ScorePAL
 
   db:
     image: mysql
