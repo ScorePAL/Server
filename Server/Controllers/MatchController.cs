@@ -34,13 +34,13 @@ public class MatchController
     }
 
     [HttpGet("{matchId}")]
-    public ActionResult<Match?> GetMatch([FromBody] string token, long matchId)
+    public ActionResult<Match?> GetMatch(string token, long matchId)
     {
         return service.GetMatch(token, matchId);
     }
 
     [HttpGet("all")]
-    public ActionResult<List<Match>> GetAllMatches([FromBody] string token, long page = 1, long limit = 10)
+    public ActionResult<List<Match>> GetAllMatches(string token, long page = 1, long limit = 10)
     {
         return service.GetAllMatches(token, page, limit);
     }
@@ -52,7 +52,7 @@ public class MatchController
     }
 
     [HttpGet("club/{clubId}")]
-    public ActionResult<List<Match>> GetClubMatches([FromBody] string token, long clubId)
+    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
     {
         return service.GetClubMatches(token, clubId);
     }
