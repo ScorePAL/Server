@@ -1,7 +1,7 @@
 ﻿services:
   api_scorepal:
     build:
-      context: ./ScorePALServer
+      context: ./Server
       dockerfile: Dockerfile
     container_name: api_scorepal
     networks:
