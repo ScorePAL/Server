@@ -16,6 +16,7 @@
       - DB_USER=root
       - DB_PASSWORD=root_password
       - DB_NAME=ScorePAL
+      - OAUTHKEY=iRHqPXfn970iwdpgyTrWQ8shGFDB3v
 
   db:
     image: mysql

@@ -1,8 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ScorePALServer.DAO.Interfaces;
+using ScorePALServer.Exceptions.User;
 using ScorePALServer.Model.ClubModel;
 using ScorePALServer.Model.User;
 
@@ -44,7 +46,7 @@ public class UserDAO : IUserDAO
         }
         else
         {
-            return new BadRequestObjectResult("Token invalide.");
+            throw new InvalidTokenException(token);
         }
 
         return new OkObjectResult(user);
@@ -63,7 +65,7 @@ public class UserDAO : IUserDAO
 
         if (result.Rows.Count > 0)
         {
-            return new BadRequestObjectResult("Un utilisateur avec cet email existe déjà.");
+            throw new EmailAlreadyUsedException();
         }
 
         long userId = conn.ExecuteInsert(
@@ -88,7 +90,7 @@ public class UserDAO : IUserDAO
             }
         );
 
-        return new OkObjectResult("Utilisateur créé avec succès.");
+        return new OkResult();
     }
 
     public ActionResult<Tuple<String, String>> LoginUser(string email, string password)
@@ -104,18 +106,18 @@ public class UserDAO : IUserDAO
 
         if (result.Rows.Count == 0)
         {
-            return new BadRequestObjectResult("Aucun utilisateur avec cet email.");
+            throw new UserNotFoundException(email);
         }
 
         string hashedPassword = result.Rows[0]["password"].ToString() ?? "";
 
         if (!hashedPassword.SequenceEqual(password))
         {
-            return new BadRequestObjectResult("Mot de passe incorrect.");
+            throw new InvalidPasswordException();
         }
 
-        string token = GenerateJwtToken(email, 120);
-        string refreshToken = GenerateJwtToken(email, 150);
+        string token = GenerateJwtToken(email, 10);
+        string refreshToken = GenerateJwtToken(email, 45);
         conn.ExecuteInsert("INSERT INTO user_tokens (user_id, token, refresh_token) VALUES (@id, @token, @refreshToken)",
             new Dictionary<string, object>
             {
@@ -138,7 +140,10 @@ public class UserDAO : IUserDAO
                 { "@refreshToken", refreshtoken }
             });
 
-        if (result.Rows.Count == 0) return new BadRequestObjectResult("Token invalide.");
+        if (result.Rows.Count == 0)
+        {
+            throw new InvalidTokenException(refreshtoken);
+        }
 
         string token = GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 120);
         string refreshToken = GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 150);
@@ -189,12 +194,12 @@ public class UserDAO : IUserDAO
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey("YThSikmVXQ2WAQWRIAUm6iRr5aXMR4Sf"u8.ToArray());
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("OAUTHKEY")));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: "S3_A2_LesPloucs",
-            audience: "S3_A2_LesPloucs",
+            issuer: "ScorePAL",
+            audience: "ScorePAL",
             claims: claims,
             expires: DateTime.Now.AddDays(durationInDays),
             signingCredentials: creds);
