@@ -1,10 +1,10 @@
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
+using ScorePAL.Model.ClubModel;
 using ScorePALServer.DAO.Interfaces;
-using ScorePALServer.Model.ClubModel;
 using ScorePALServer.Model.MatchModel;
-using ScorePALServer.Model.Team;
-using ScorePALServer.Model.User;
+using ScorePALServer.Model.TeamModel;
+using ScorePALServer.Model.UserModel;
 
 namespace ScorePALServer.DAO.Implementation;
 
