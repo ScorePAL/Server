@@ -1,49 +1,19 @@
 using ScorePALServer.Model.PlayedModel;
 
-namespace ScorePALServer.Model.Player;
+namespace ScorePALServer.Model.PlayerModel;
 
-public class Player : IPlayer
+public class Player
 {
-    private long id;
-    private String firstName;
-    private String lastName;
-    private DateTime birthDate;
-    private Position[] positions;
-    private List<IPlayed> played;
 
-    public long Id
-    {
-        get => id;
-        set => id = value;
-    }
+    public long Id { get; set; }
 
-    public String FirstName
-    {
-        get => firstName;
-        set => firstName = value;
-    }
+    public String FirstName { get; set; }
 
-    public String LastName
-    {
-        get => lastName;
-        set => lastName = value;
-    }
+    public String LastName { get; set; }
 
-    public DateTime BirthDate
-    {
-        get => birthDate;
-        set => birthDate = value;
-    }
+    public DateTime BirthDate { get; set; }
 
-    public Position[] Positions
-    {
-        get => positions;
-        set => positions = value;
-    }
+    public Position[] Positions { get; set; }
 
-    public List<IPlayed> Played
-    {
-        get => played;
-        set => played = value;
-    }
+    public List<Played> Played { get; set; }
 }
