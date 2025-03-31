@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using ScorePAL.Model.ClubModel;
 using ScorePALServer.DAO.Interfaces;
-using ScorePALServer.Model.ClubModel;
 using ScorePALServer.Model.Hashing;
-using ScorePALServer.Model.User;
+using ScorePALServer.Model.UserModel;
 
 namespace ScorePALServer.DAO.Implementation;
 
