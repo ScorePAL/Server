@@ -1,6 +1,4 @@
-using System;
-
-namespace ScorePALServer.Model.User;
+namespace ScorePALServer.Model.UserModel;
 
 public enum Role
 {
