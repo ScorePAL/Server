@@ -1,50 +1,18 @@
-using System;
-using ScorePALServer.Model.ClubModel;
+using ScorePAL.Model.ClubModel;
 
-namespace ScorePALServer.Model.User;
+namespace ScorePALServer.Model.UserModel;
 
 public class User
 {
-    private long id;
-    private String firstName;
-    private String lastName;
-    private Role role;
-    private DateTime createdAt;
-    private IClub relatedTo;
+    public long Id { get; set; }
 
-    public long Id
-    {
-        get => id;
-        set => id = value;
-    }
+    public String FirstName { get; set; }
 
-    public String FirstName
-    {
-        get => firstName;
-        set => firstName = value;
-    }
+    public String LastName { get; set; }
 
-    public String LastName
-    {
-        get => lastName;
-        set => lastName = value;
-    }
+    public Role Role { get; set; }
 
-    public Role Role
-    {
-        get => role;
-        set => role = value;
-    }
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime CreatedAt
-    {
-        get => createdAt;
-        set => createdAt = value;
-    }
-
-    public IClub RelatedTo
-    {
-        get => relatedTo;
-        set => relatedTo = value;
-    }
+    public Club RelatedTo { get; set; }
 }
