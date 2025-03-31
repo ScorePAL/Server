@@ -7,6 +7,10 @@ using ScorePALServer.DAO.Interfaces;
 using ScorePALServer.Exceptions.User;
 using ScorePALServer.Model.ClubModel;
 using ScorePALServer.Model.User;
+using ScorePAL.Model.ClubModel;
+using ScorePALServer.DAO.Interfaces;
+using ScorePALServer.Model.Hashing;
+using ScorePALServer.Model.UserModel;
 
 namespace ScorePALServer.DAO.Implementation;
 

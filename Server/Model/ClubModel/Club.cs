@@ -1,35 +1,14 @@
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 
-namespace ScorePALServer.Model.ClubModel;
+namespace ScorePAL.Model.ClubModel;
 
-public class Club : IClub
+public class Club
 {
-    private long id;
-    private String name;
-    private String logoUrl;
-    private List<ITeam> teams;
+    public String LogoUrl { get; set; }
 
-    public String LogoUrl
-    {
-        get => logoUrl;
-        set => logoUrl = value;
-    }
+    public String Name { get; set; }
 
-    public String Name
-    {
-        get => name;
-        set => name = value;
-    }
+    public long Id { get; set; }
 
-    public long Id
-    {
-        get => id;
-        set => id = value;
-    }
-
-    public List<ITeam> Teams
-    {
-        get => teams;
-        set => teams = value;
-    }
+    public List<Team> Teams { get; set; }
 }

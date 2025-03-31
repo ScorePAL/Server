@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.DAO.Interfaces;
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Service.Interfaces;
 
 namespace ScorePALServer.Service.Implementation;

@@ -1,127 +1,41 @@
 using ScorePALServer.Model.MatchModel;
-using ScorePALServer.Model.Player;
+using ScorePALServer.Model.PlayerModel;
 
 namespace ScorePALServer.Model.PlayedModel;
 
-public class Played : IPlayed
+public class Played
 {
-    private long id;
-    private List<Position> positions;
-    private bool isCaptain;
-    private bool isInjured;
-    private bool redCard;
-    private bool yellowCard;
-    private long offTargetShots;
-    private long onTargetShots;
-    private long blockedShots;
-    private long goals;
-    private long exitTime;
-    private long entryTime;
-    private long jerseyNumber;
-    private List<IPenalty> penalties = new();
-    private List<IAssist> assists = new();
-    private IPlayer player;
-    private IMatch match;
+    public IMatch Match { get; set; }
 
-    public IMatch Match
-    {
-        get => match;
-        set => match = value;
-    }
+    public List<Penalty> Penalties { get; set; }
 
-    public List<IPenalty> Penalties
-    {
-        get => penalties;
-        set => penalties = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    public List<Assist> Assists { get; set; }
 
-    public List<IAssist> Assists
-    {
-        get => assists;
-        set => assists = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    public Player Player { get; set; }
 
-    public IPlayer Player
-    {
-        get => player;
-        set => player = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    public List<Position> Positions { get; set; }
 
-    public List<Position> Positions
-    {
-        get => positions;
-        set => positions = value;
-    }
+    public bool IsCaptain { get; set; }
 
-    public bool IsCaptain
-    {
-        get => isCaptain;
-        set => isCaptain = value;
-    }
+    public bool IsInjured { get; set; }
 
-    public bool IsInjured
-    {
-        get => isInjured;
-        set => isInjured = value;
-    }
+    public bool RedCard { get; set; }
 
-    public bool RedCard
-    {
-        get => redCard;
-        set => redCard = value;
-    }
+    public bool YellowCard { get; set; }
 
-    public bool YellowCard
-    {
-        get => yellowCard;
-        set => yellowCard = value;
-    }
+    public long OffTargetShots { get; set; }
 
-    public long OffTargetShots
-    {
-        get => offTargetShots;
-        set => offTargetShots = value;
-    }
+    public long OnTargetShots { get; set; }
 
-    public long OnTargetShots
-    {
-        get => onTargetShots;
-        set => onTargetShots = value;
-    }
+    public long BlockedShots { get; set; }
 
-    public long BlockedShots
-    {
-        get => blockedShots;
-        set => blockedShots = value;
-    }
+    public long Goals { get; set; }
 
-    public long Goals
-    {
-        get => goals;
-        set => goals = value;
-    }
+    public long ExitTime { get; set; }
 
-    public long ExitTime
-    {
-        get => exitTime;
-        set => exitTime = value;
-    }
+    public long EntryTime { get; set; }
 
-    public long EntryTime
-    {
-        get => entryTime;
-        set => entryTime = value;
-    }
+    public long JerseyNumber { get; set; }
 
-    public long JerseyNumber
-    {
-        get => jerseyNumber;
-        set => jerseyNumber = value;
-    }
-
-    public long Id
-    {
-        get => id;
-        set => id = value;
-    }
+    public long Id { get; set; }
 }
