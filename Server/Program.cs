@@ -1,5 +1,7 @@
+using ScorePALServer;
 using ScorePALServer.DAO.Implementation;
 using ScorePALServer.DAO.Interfaces;
+using ScorePALServer.Exceptions;
 using ScorePALServer.Service.Implementation;
 using ScorePALServer.Service.Interfaces;
 using ScorePALServer.SSE;
@@ -26,6 +28,8 @@ builder.Services.AddScoped<ICounterService, CounterService>();
 builder.Services.AddSingleton<IConnectionManager, ConnectionManager>();
 builder.Services.AddSingleton<IEventPublisher, SSEEventPublisher>();
 
+
+
 var app = builder.Build();
 
 // Swagger Configuration
@@ -48,5 +52,6 @@ app.MapGet("/sse", async (HttpContext ctx,
 
 // Mapping des contrôleurs REST&
 app.MapControllers();
+app.UseMiddleware<ErrorHandler>();
 
 await app.RunAsync();

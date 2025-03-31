@@ -1,4 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using ScorePALServer.DAO.Interfaces;
+using ScorePALServer.Exceptions.User;
+using ScorePALServer.Model.ClubModel;
+using ScorePALServer.Model.User;
 using ScorePAL.Model.ClubModel;
 using ScorePALServer.DAO.Interfaces;
 using ScorePALServer.Model.Hashing;
@@ -42,13 +50,13 @@ public class UserDAO : IUserDAO
         }
         else
         {
-            return new BadRequestObjectResult("Token invalide.");
+            throw new InvalidTokenException(token);
         }
 
         return new OkObjectResult(user);
     }
 
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
+    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId, string salt)
     {
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
@@ -61,11 +69,8 @@ public class UserDAO : IUserDAO
 
         if (result.Rows.Count > 0)
         {
-            return new BadRequestObjectResult("Un utilisateur avec cet email existe déjà.");
+            throw new EmailAlreadyUsedException();
         }
-
-        string salt = Hash.GenerateSalt();
-        byte[] hashedPassword = Hash.HashPassword(password + salt);
 
         long userId = conn.ExecuteInsert(
             "INSERT INTO users (first_name, last_name, role, created_at, related_to) VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
@@ -84,12 +89,12 @@ public class UserDAO : IUserDAO
             {
                 { "@id", userId },
                 { "@email", email },
-                { "@password", Convert.ToBase64String(hashedPassword) },
+                { "@password", password },
                 { "@salt", salt }
             }
         );
 
-        return new OkObjectResult("Utilisateur créé avec succès.");
+        return new OkResult();
     }
 
     public ActionResult<Tuple<String, String>> LoginUser(string email, string password)
@@ -105,21 +110,18 @@ public class UserDAO : IUserDAO
 
         if (result.Rows.Count == 0)
         {
-            return new BadRequestObjectResult("Aucun utilisateur avec cet email.");
+            throw new UserNotFoundException(email);
         }
 
-        byte[] hashedPassword = Convert.FromBase64String(result.Rows[0]["password"].ToString() ?? "");
-        string salt = result.Rows[0]["salt"].ToString() ?? "";
+        string hashedPassword = result.Rows[0]["password"].ToString() ?? "";
 
-        byte[] hashedPasswordToCheck = Hash.HashPassword(password + salt);
-
-        if (!hashedPassword.SequenceEqual(hashedPasswordToCheck))
+        if (!hashedPassword.SequenceEqual(password))
         {
-            return new BadRequestObjectResult("Mot de passe incorrect.");
+            throw new InvalidPasswordException();
         }
 
-        string token = Hash.GenerateJwtToken(email, 120);
-        string refreshToken = Hash.GenerateJwtToken(email, 150);
+        string token = GenerateJwtToken(email, 10);
+        string refreshToken = GenerateJwtToken(email, 45);
         conn.ExecuteInsert("INSERT INTO user_tokens (user_id, token, refresh_token) VALUES (@id, @token, @refreshToken)",
             new Dictionary<string, object>
             {
@@ -142,10 +144,13 @@ public class UserDAO : IUserDAO
                 { "@refreshToken", refreshtoken }
             });
 
-        if (result.Rows.Count == 0) return new BadRequestObjectResult("Token invalide.");
+        if (result.Rows.Count == 0)
+        {
+            throw new InvalidTokenException(refreshtoken);
+        }
 
-        string token = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 120);
-        string refreshToken = Hash.GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 150);
+        string token = GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 120);
+        string refreshToken = GenerateJwtToken(result.Rows[0]["user_id"].ToString() ?? "", 150);
         conn.ExecuteQuery("UPDATE user_tokens SET token=@token, refresh_token=@refreshToken WHERE refresh_token=@previousRefreshToken AND user_id=@id",
             new Dictionary<string, object>
             {
@@ -156,5 +161,53 @@ public class UserDAO : IUserDAO
             });
 
         return new OkObjectResult(new Tuple<string, string>(token, refreshToken));
+    }
+
+    public string GetSaltBuYser(string email)
+    {
+        string salt = "";
+
+        using var conn = new MySqlController();
+        var result = conn.ExecuteQuery(
+            "SELECT salt FROM user_authentification WHERE email = @email",
+            new Dictionary<string, object>
+            {
+                { "@email", email }
+            }
+        );
+
+        if (result.Rows.Count > 0)
+        {
+            salt = result.Rows[0]["salt"].ToString();
+        }
+
+        return salt;
+    }
+
+    /// <summary>
+    /// Generate a JWT token for a user
+    /// </summary>
+    /// <param name="username">The user's username</param>
+    /// <param name="durationInDays">The duration of the token</param>
+    /// <returns>The token the was created</returns>
+    private static string GenerateJwtToken(string username, int durationInDays)
+    {
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, username),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("OAUTHKEY")));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "ScorePAL",
+            audience: "ScorePAL",
+            claims: claims,
+            expires: DateTime.Now.AddDays(durationInDays),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
