@@ -12,11 +12,8 @@
       - "8080:8080"
     environment:
       - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=root_password
-      - DB_NAME=ScorePAL
-      - OAUTHKEY=iRHqPXfn970iwdpgyTrWQ8shGFDB3v
+    volumes:
+      - ./script.sql:/docker-entrypoint-initdb.d/init.sql
 
   db:
     image: mysql

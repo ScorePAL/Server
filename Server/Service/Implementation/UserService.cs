@@ -1,8 +1,12 @@
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Security;
 using ScorePALServer.DAO.Interfaces;
+using ScorePALServer.Exceptions.User;
+using ScorePALServer.Model.ClubModel;
+using ScorePALServer.Model.UserModel;
 using ScorePALServer.Service.Interfaces;
 
 namespace ScorePALServer.Service.Implementation;
@@ -10,15 +14,32 @@ namespace ScorePALServer.Service.Implementation;
 public class UserService : IUserService
 {
     private readonly IUserDAO dao;
+    private readonly ITokenService tokenService;
 
-    public UserService(IUserDAO dao)
+    public UserService(IUserDAO dao, ITokenService tokenService)
     {
         this.dao = dao;
+        this.tokenService = tokenService;
     }
 
-    public ActionResult GetUserByToken(string token)
+    /// <summary>
+    /// Return the user based on the given token
+    /// </summary>
+    /// <returns></returns>
+    private User GetUserByToken(ClaimsPrincipal claims)
     {
-        return dao.GetUserByToken(token);
+        if (Enum.TryParse(claims.FindFirst("role")?.Value!, out Role role))
+        {
+            return new User
+            {
+                Id = Int64.Parse(claims.FindFirst("id")?.Value!),
+                FirstName = claims.FindFirst("firstName")?.Value!,
+                LastName = claims.FindFirst("lastName")?.Value!,
+                Role = role
+            };
+        }
+
+        return null;
     }
 
     public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
@@ -29,9 +50,9 @@ public class UserService : IUserService
         return dao.RegisterUser(firstName, lastName, email, hashedPassword, clubId, salt);
     }
 
-    public ActionResult<Tuple<string, string>> LoginUser(string email, string password)
+    public ActionResult<User> LoginUser(string email, string password)
     {
-        string salt = dao.GetSaltBuYser(email);
+        string salt = dao.GetSaltByUser(email);
 
         if (salt == "")
         {
@@ -40,12 +61,35 @@ public class UserService : IUserService
 
         var hashedPassword = HashPassword(password, salt);
 
-        return dao.LoginUser(email, hashedPassword);
+        ActionResult<User> result = dao.LoginUser(email, hashedPassword);
+
+        if (result is OkObjectResult)
+        {
+            User user = result.Value!;
+            var token = tokenService.Create(user);
+            var refreshToken = tokenService.CreateRefresh(user);
+
+            user.Token = token;
+            user.RefreshToken = refreshToken;
+
+            return new OkObjectResult(user);
+        }
+
+        return result;
     }
 
-    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    public ActionResult<string> GenerateNewToken(ClaimsPrincipal claims)
     {
-        return dao.GenerateNewToken(refreshtoken);
+        User user = GetUserByToken(claims);
+
+        if (user == null)
+        {
+            throw new UserNotFoundException("Not provided");
+        }
+
+        var token = tokenService.CreateRefresh(user);
+
+        return new OkObjectResult(token);
     }
 
 

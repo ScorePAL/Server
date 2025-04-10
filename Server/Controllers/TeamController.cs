@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.Team;
 using ScorePALServer.Service.Interfaces;
@@ -5,42 +6,37 @@ using ScorePALServer.Service.Interfaces;
 namespace ScorePALServer.Controllers;
 
 [Route("/api/team")]
-public class TeamController
+public class TeamController : ControllerBase
 {
     private ITeamService service;
+    private ITokenService tokenService;
 
-    public TeamController(ITeamService service)
+    public TeamController(ITeamService service, ITokenService tokenService)
     {
         this.service = service;
+        this.tokenService = tokenService;
     }
 
+    [Authorize]
     [HttpGet("all")]
-    public ActionResult<List<Team>> GetTeams(string token, long page, long limit)
+    public ActionResult<Team[]> GetTeams(long page, long limit)
     {
-        return service.GetTeams(token, page, limit);
+        tokenService.CheckIfUserIsAdmin(HttpContext.User);
+        return service.GetTeams(page, limit);
     }
 
+    [Authorize]
     [HttpGet("{id}")]
-    public ActionResult<Team> GetTeam(string token, long id)
+    public ActionResult<Team> GetTeam(long id)
     {
-        return service.GetTeam(token, id);
+        return service.GetTeam(id);
     }
 
-    [HttpPost("create")]
-    public ActionResult CreateTeam([FromBody] string token, string name, long clubId)
-    {
-        return service.CreateTeam(token, name, clubId);
-    }
-
+    [Authorize]
     [HttpPut("update/{id}")]
-    public ActionResult UpdateTeam([FromBody] string token, long id, string name)
+    public ActionResult UpdateTeam([FromBody] long id, string name)
     {
-        return service.UpdateTeam(token, id, name);
-    }
-
-    [HttpDelete("delete/{id}")]
-    public ActionResult DeleteTeam(string token, long id)
-    {
-        return service.DeleteTeam(token, id);
+        tokenService.CheckIfUserIsAdminStaffOrCoach(HttpContext.User);
+        return service.UpdateTeam(HttpContext.User, id, name);
     }
 }

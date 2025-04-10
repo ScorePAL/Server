@@ -13,13 +13,21 @@ public class MySqlController : IDisposable
     /// </summary>
     public MySqlController()
     {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory()) // racine du projet
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
         string connectionString = new MySqlConnectionStringBuilder
         {
+            // Utilisation du container pour facilement changer de bdd, pour le reste utiliser les variables d'environnement
             Server = Environment.GetEnvironmentVariable("DB_HOST"),
-            UserID = Environment.GetEnvironmentVariable("DB_USER"),
-            Password = Environment.GetEnvironmentVariable("DB_PASSWORD"),
-            Database = Environment.GetEnvironmentVariable("DB_NAME"),
-            Port = uint.Parse(Environment.GetEnvironmentVariable("DB_PORT") ?? throw new InvalidOperationException())
+            UserID = configuration.GetConnectionString("DB_USER"),
+            Password = configuration.GetConnectionString("DB_PASSWORD"),
+            Database = configuration.GetConnectionString("DB_NAME"),
+            Port = uint.Parse(configuration.GetConnectionString("DB_PORT") ?? throw new InvalidOperationException())
         }.ConnectionString;
 
         connection = new MySqlConnection(connectionString);

@@ -1,16 +1,11 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using ScorePALServer.Model.UserModel;
 
 namespace ScorePALServer.Service.Interfaces;
 
 public interface IUserService
 {
-    /// <summary>
-    /// Return the user with the given id
-    /// </summary>
-    /// <param name="token">The user's token</param>
-    /// <returns></returns>
-    public ActionResult GetUserByToken(string token);
-
     /// <summary>
     /// Create a new user
     /// </summary>
@@ -28,12 +23,11 @@ public interface IUserService
     /// <param name="email">The user's email</param>
     /// <param name="password">The user's password</param>
     /// <returns></returns>
-    public ActionResult<Tuple<string, string>> LoginUser(string email, string password);
+    public ActionResult<User> LoginUser(string email, string password);
 
     /// <summary>
     /// Generate a new token for the user
     /// </summary>
-    /// <param name="refreshtoken">The refresh token of the user</param>
     /// <returns></returns>
-    ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken);
+    ActionResult<string> GenerateNewToken(ClaimsPrincipal claims);
 }

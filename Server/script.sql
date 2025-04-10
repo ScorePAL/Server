@@ -1,3 +1,5 @@
+create schema if not exists ScorePAL;
+
 create table clubs
 (
     club_id  bigint auto_increment
@@ -144,16 +146,6 @@ create table users
         foreign key (club) references clubs (club_id)
 );
 
-create table password_reset_tokens
-(
-    token           varchar(270) not null
-        primary key,
-    expiration_date datetime     null,
-    user_id         bigint       null,
-    constraint password_reset_tokens_users_user_id_fk
-        foreign key (user_id) references users (user_id)
-);
-
 create index club
     on users (club);
 
@@ -167,20 +159,3 @@ create table users_authentication
     constraint users_authentication_ibfk_1
         foreign key (user_id) references users (user_id)
 );
-
-create table users_tokens
-(
-    user_id                 bigint       null,
-    token                   varchar(275) not null,
-    refresh_token           varchar(275) not null,
-    expiration_date         datetime     null,
-    refresh_expiration_date datetime     null,
-    primary key (token, refresh_token),
-    constraint users_tokens_ibfk_1
-        foreign key (user_id) references users (user_id)
-);
-
-create index user_id
-    on users_tokens (user_id);
-
-

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.MatchHistoryModel;
 using ScorePALServer.Model.MatchModel;
@@ -8,7 +9,7 @@ using ScorePALServer.SSE.Events;
 namespace ScorePALServer.Controllers;
 
 [Route("api/match")]
-public class MatchController
+public class MatchController : ControllerBase
 {
     private readonly IEventPublisher eventPublisher;
     private readonly IMatchService service;
@@ -19,10 +20,11 @@ public class MatchController
         service = matchService;
     }
 
+    [Authorize]
     [HttpPut("update-score/{matchId}")]
-    public async Task<IActionResult> UpdateScore([FromBody] string token, long matchId, int scoreTeam1, int scoreTeam2)
+    public async Task<IActionResult> UpdateScore(long matchId, int scoreTeam1, int scoreTeam2)
     {
-        var result = service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
+        var result = service.UpdateMatchScore(HttpContext.User, matchId, scoreTeam1, scoreTeam2);
         if (result is OkObjectResult)
         {
             var response = (OkObjectResult) result;
@@ -33,27 +35,31 @@ public class MatchController
         return result is OkObjectResult ? new OkResult() : result;
     }
 
+    [Authorize]
     [HttpGet("{matchId}")]
-    public ActionResult<Match?> GetMatch(string token, long matchId)
+    public ActionResult<Match?> GetMatch(long matchId)
     {
-        return service.GetMatch(token, matchId);
+        return service.GetMatch(HttpContext.User, matchId);
     }
 
+    [Authorize]
     [HttpGet("all")]
-    public ActionResult<List<Match>> GetAllMatches(string token, long page = 1, long limit = 10)
+    public ActionResult<Match[]> GetAllMatches(long page = 1, long limit = 10)
     {
-        return service.GetAllMatches(token, page, limit);
+        return service.GetAllMatches(page, limit);
     }
 
+    [Authorize]
     [HttpPost("create")]
-    public ActionResult<long> CreateMatch([FromBody] string token, [FromBody] Match match)
+    public ActionResult<long> CreateMatch([FromBody] Match match)
     {
-        return service.CreateMatch(token, match);
+        return service.CreateMatch(HttpContext.User, match);
     }
 
+    [Authorize]
     [HttpGet("club/{clubId}")]
-    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    public ActionResult<Match[]> GetClubMatches(long clubId)
     {
-        return service.GetClubMatches(token, clubId);
+        return service.GetClubMatches(HttpContext.User, clubId);
     }
 }

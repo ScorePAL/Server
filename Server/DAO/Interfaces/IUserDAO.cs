@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using ScorePALServer.Model.UserModel;
 
 namespace ScorePALServer.DAO.Interfaces;
 
 public interface IUserDAO
 {
-    /// <summary>
-    /// Return the user with the given id
-    /// </summary>
-    /// <param name="token">The user's token</param>
-    /// <returns></returns>
-    public ActionResult GetUserByToken(string token);
-
     /// <summary>
     /// Create a new user
     /// </summary>
@@ -30,19 +24,12 @@ public interface IUserDAO
     /// <param name="email">The user's email</param>
     /// <param name="password">The user's password</param>
     /// <returns></returns>
-    public ActionResult<Tuple<string, string>> LoginUser(string email, string password);
-
-    /// <summary>
-    /// Generate a new token for the user
-    /// </summary>
-    /// <param name="refreshtoken">The refresh token of the user</param>
-    /// <returns></returns>
-    ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken);
+    public ActionResult<User> LoginUser(string email, string password);
 
     /// <summary>
     /// Get the salt from the user given the email
     /// </summary>
     /// <param name="email">The email linked to the salt</param>
     /// <returns>The salt of the user</returns>
-    string GetSaltBuYser(string email);
+    string GetSaltByUser(string email);
 }

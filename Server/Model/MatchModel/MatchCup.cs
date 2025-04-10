@@ -27,12 +27,6 @@ public class MatchCup : IMatch
         set => match.Coach = value;
     }
 
-    public bool IsHome
-    {
-        get => match.IsHome;
-        set => match.IsHome = value;
-    }
-
     public DateTime Date
     {
         get => match.Date;

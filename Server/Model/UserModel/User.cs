@@ -1,7 +1,6 @@
-using System;
 using ScorePALServer.Model.ClubModel;
 
-namespace ScorePALServer.Model.User;
+namespace ScorePALServer.Model.UserModel;
 
 public class User
 {
@@ -11,6 +10,8 @@ public class User
     private Role role;
     private DateTime createdAt;
     private IClub relatedTo;
+    private string token;
+    private string refreshToken;
 
     public long Id
     {
@@ -46,5 +47,17 @@ public class User
     {
         get => relatedTo;
         set => relatedTo = value;
+    }
+
+    public string Token
+    {
+        get => token;
+        set => token = value;
+    }
+
+    public string RefreshToken
+    {
+        get => refreshToken;
+        set => refreshToken = value;
     }
 }

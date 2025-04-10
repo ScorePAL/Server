@@ -12,7 +12,6 @@ public class Match : IMatch
     private DateTime date;
     private String address;
     private String coach;
-    private bool isHome;
     private MatchState state;
     private DateTime startedTime;
     private long score1;
@@ -54,12 +53,6 @@ public class Match : IMatch
     {
         get => coach;
         set => coach = value ?? throw new ArgumentNullException(nameof(value));
-    }
-
-    public bool IsHome
-    {
-        get => isHome;
-        set => isHome = value;
     }
 
     public MatchState State

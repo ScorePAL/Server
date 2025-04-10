@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.DAO.Interfaces;
 using ScorePALServer.Model.MatchModel;
+using ScorePALServer.Model.UserModel;
 using ScorePALServer.Service.Interfaces;
 
 namespace ScorePALServer.Service.Implementation;
@@ -8,34 +10,38 @@ namespace ScorePALServer.Service.Implementation;
 public class MatchService : IMatchService
 {
     private IMatchDAO dao;
+    private ITokenService tokenService;
 
-    public MatchService(IMatchDAO dao)
+    public MatchService(IMatchDAO dao, ITokenService tokenService)
     {
         this.dao = dao;
     }
 
-    public ActionResult UpdateMatchScore(string token, long matchId, int scoreTeam1, int scoreTeam2)
+    public ActionResult UpdateMatchScore(ClaimsPrincipal claims, long matchId, int scoreTeam1, int scoreTeam2)
     {
-        return dao.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
+        User user = tokenService.ExtractUser(claims);
+        return dao.UpdateMatchScore(user, matchId, scoreTeam1, scoreTeam2);
     }
 
-    public ActionResult<Match?> GetMatch(string token, long matchId)
+    public ActionResult<Match?> GetMatch(ClaimsPrincipal claims, long matchId)
     {
-        return dao.GetMatch(token, matchId);
+        User user = tokenService.ExtractUser(claims);
+        return dao.GetMatch(user, matchId);
     }
 
-    public ActionResult<List<Match>> GetAllMatches(string token, long page, long limit)
+    public ActionResult<Match[]> GetAllMatches(long page, long limit)
     {
-        return dao.GetAllMatches(token, page, limit);
+        return dao.GetAllMatches(page, limit);
     }
 
-    public ActionResult<long> CreateMatch(string token, Match match)
+    public ActionResult<long> CreateMatch(ClaimsPrincipal claims, Match match)
     {
-        return dao.CreateMatch(token, match);
+        User user = tokenService.ExtractUser(claims);
+        return dao.CreateMatch(user, match);
     }
 
-    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    public ActionResult<Match[]> GetClubMatches(ClaimsPrincipal claims, long clubId)
     {
-        return dao.GetClubMatches(token, clubId);
+        return dao.GetClubMatches(clubId);
     }
 }
