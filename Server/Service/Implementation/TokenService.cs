@@ -10,27 +10,113 @@ namespace ScorePALServer.Service.Implementation;
 
 public class TokenService : ITokenService
 {
+    private readonly SigningCredentials credentials;
+
+    public TokenService()
+    {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(configuration.GetSection("OAuth")["Key"]!)
+        );
+
+        credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+    }
+
     public string Create(User user)
     {
-        return CreateToken(10, user);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity([
+                new Claim("id", user.Id.ToString()),
+                new Claim("first_name", user.FirstName),
+                new Claim("last_name", user.LastName),
+                new Claim("role", user.Role.ToString()),
+                new Claim("clubId", user.RelatedTo.Id.ToString())
+            ]),
+            // Expiration
+            Expires = DateTime.UtcNow.AddMinutes(10),
+
+            // Algorithme de signature
+            SigningCredentials = credentials,
+
+            // Qui émet le jeton
+            Issuer = "https://localhost/",
+
+            // Pour qui est prévu le jeton (qui va l' utiliser pour authentifier un utilisateur)
+            Audience = "https://localhost/api"
+        };
+
+        return CreateToken(tokenDescriptor);
     }
 
     public string CreateRefresh(User user)
     {
-        return CreateToken(1440, user);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity([
+                new Claim("id", user.Id.ToString()),
+                new Claim("first_name", user.FirstName),
+                new Claim("last_name", user.LastName),
+                new Claim("role", user.Role.ToString()),
+                new Claim("clubId", user.RelatedTo.Id.ToString())
+            ]),
+            // Expiration
+            Expires = DateTime.UtcNow.AddMinutes(1440),
+
+            // Algorithme de signature
+            SigningCredentials = credentials,
+
+            // Qui émet le jeton
+            Issuer = "https://localhost/",
+
+            // Pour qui est prévu le jeton (qui va l' utiliser pour authentifier un utilisateur)
+            Audience = "https://localhost/api/user/refresh-token"
+        };
+
+        return CreateToken(tokenDescriptor);
+    }
+
+    public string CreateResetPasswordToken(string email)
+    {
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity([
+                new Claim("email", email),
+            ]),
+            // Expiration
+            Expires = DateTime.UtcNow.AddMinutes(120),
+
+            // Algorithme de signature
+            SigningCredentials = credentials,
+
+            // Qui émet le jeton
+            Issuer = "https://localhost/",
+
+            // Pour qui est prévu le jeton (qui va l'utiliser pour authentifier un utilisateur)
+            Audience = "https://localhost/api/user/reset-password"
+        };
+
+        return CreateToken(tokenDescriptor);
     }
 
     public User ExtractUser(ClaimsPrincipal claims)
     {
         User user = new User
         {
-            Id = claims.FindFirst("id") != null ? Int64.Parse(claims.FindFirst("id")?.Value!) : 0,
+            Id = claims.FindFirst("id") != null ? long.Parse(claims.FindFirst("id")?.Value!) : 0,
             FirstName = claims.FindFirst("first_name")?.Value!,
             LastName = claims.FindFirst("last_name")?.Value!,
             Role = Enum.TryParse(claims.FindFirst("role")?.Value!, out Role role) ? role : Role.Supporter,
             RelatedTo = new Club
             {
-                Id = claims.FindFirst("clubId") != null ? Int64.Parse(claims.FindFirst("clubId")?.Value!) : 0
+                Id = claims.FindFirst("clubId") != null ? long.Parse(claims.FindFirst("clubId")?.Value!) : 0
             }
         };
 
@@ -76,52 +162,15 @@ public class TokenService : ITokenService
         }
     }
 
-    private string CreateToken(int minutes, User user)
+    /// <summary>
+    /// Create a token with a given time and object
+    /// </summary>
+    /// <param name="descriptor"></param>
+    /// <exception cref="InvalidDataException"></exception>
+    /// <returns></returns>
+    private string CreateToken(SecurityTokenDescriptor descriptor)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory()) // racine du projet
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-                optional: true)
-            .AddEnvironmentVariables()
-            .Build();
-
-        //On en fait une clé de crypto symétrique
-        SymmetricSecurityKey securityKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("OAuth")["Key"]!));
-
-        //On crée l'algo de signature (en précisant la clé et l'algo utilisé )
-        SigningCredentials credentials = new SigningCredentials(securityKey,
-            SecurityAlgorithms.HmacSha256);
-
-        //On décrit le token
-        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-        {
-            // Info du jeton ( PAYLOAD )
-            Subject = new ClaimsIdentity(
-                [
-                    new Claim("id", user.Id.ToString()),
-                    new Claim("first_name", user.FirstName),
-                    new Claim("last_name", user.LastName),
-                    new Claim("club_id", user.RelatedTo.Id.ToString()),
-                    new Claim("role", user.Role.ToString()),
-                ]
-            ),
-
-            // Expiration
-            Expires = DateTime.UtcNow.AddMinutes(minutes),
-
-            // Algorithme de signature
-            SigningCredentials = credentials,
-
-            // Qui émet le jeton
-            Issuer = "https :// localhost /",
-
-            // Pour qui est prévu le jeton (qui va l' utiliser pour authentifier un utilisateur)
-            Audience = "https :// localhost / Commandes "
-        };
-        // Création du générateur de token
         var handler = new JsonWebTokenHandler();
-        return handler.CreateToken(tokenDescriptor);
+        return handler.CreateToken(descriptor);
     }
 }

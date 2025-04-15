@@ -92,6 +92,15 @@ public class UserService : IUserService
         return new OkObjectResult(token);
     }
 
+    public ActionResult ResetPassword(string email)
+    {
+        var token = tokenService.CreateResetPasswordToken(email);
+
+        // Send email
+
+        return new OkObjectResult(token);
+    }
+
 
     /// <summary>
     /// Create a hash from a string

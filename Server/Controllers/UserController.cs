@@ -33,4 +33,10 @@ public class UserController : ControllerBase
     {
         return service.GenerateNewToken(HttpContext.User);
     }
+
+    [HttpPost("reset-password")]
+    public ActionResult ResetPassword(string email)
+    {
+        return service.ResetPassword(email);
+    }
 }

@@ -30,4 +30,11 @@ public interface IUserService
     /// </summary>
     /// <returns></returns>
     ActionResult<string> GenerateNewToken(ClaimsPrincipal claims);
+
+    /// <summary>
+    /// Send a mail to the given email with a link to reset his password
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
+    ActionResult ResetPassword(string email);
 }
