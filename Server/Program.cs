@@ -48,8 +48,6 @@ builder.Services.AddScoped<IMatchDAO, MatchDAO>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserDAO, UserDAO>();
 
-builder.Services.AddScoped<ICounterService, CounterService>();
-
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ITeamDAO, TeamDAO>();
 
