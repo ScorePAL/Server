@@ -12,8 +12,6 @@
       - "8080:8080"
     environment:
       - DB_HOST=db
-    volumes:
-      - ./script.sql:/docker-entrypoint-initdb.d/init.sql
 
   db:
     image: mysql
@@ -23,6 +21,8 @@
       - web
     ports:
       - "3306:3306"
+    volumes:
+      - ./Server/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   phpmyadmin:
     image: phpmyadmin

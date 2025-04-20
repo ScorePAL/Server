@@ -1,5 +1,7 @@
 create schema if not exists ScorePAL;
 
+use ScorePAL;
+
 create table clubs
 (
     club_id  bigint auto_increment
