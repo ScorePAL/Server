@@ -1,6 +1,6 @@
 namespace ScorePALServer.Model.PlayedModel;
 
-public class Penalty : IPenalty
+public class Penalty
 {
     private PenaltyObtainingMethod obtainingMethod;
     private PenaltyResult result;

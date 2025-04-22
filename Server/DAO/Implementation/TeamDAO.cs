@@ -4,7 +4,7 @@ using ScorePALServer.DAO.Interfaces;
 using ScorePALServer.Exceptions.Team;
 using ScorePALServer.Exceptions.User;
 using ScorePALServer.Model.ClubModel;
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
 
 namespace ScorePALServer.DAO.Implementation;

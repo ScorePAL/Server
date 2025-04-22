@@ -1,14 +1,13 @@
-using System;
 using ScorePALServer.Model.ClubModel;
 using ScorePALServer.Model.MatchModel;
 
-namespace ScorePALServer.Model.Team;
+namespace ScorePALServer.Model.TeamModel;
 
-public class Team : ITeam
+public class Team
 {
     private long id;
     private String name;
-    private IClub club;
+    private Club club;
     private List<IMatch> matches;
 
     public long Id
@@ -23,7 +22,7 @@ public class Team : ITeam
         set => name = value;
     }
 
-    public IClub Club
+    public Club Club
     {
         get => club;
         set => club = value;

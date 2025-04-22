@@ -9,7 +9,7 @@ public class User
     private String lastName;
     private Role role;
     private DateTime createdAt;
-    private IClub relatedTo;
+    private Club relatedTo;
     private string token;
     private string refreshToken;
 
@@ -43,7 +43,7 @@ public class User
         set => createdAt = value;
     }
 
-    public IClub RelatedTo
+    public Club RelatedTo
     {
         get => relatedTo;
         set => relatedTo = value;

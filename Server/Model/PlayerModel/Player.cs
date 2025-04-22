@@ -1,15 +1,15 @@
 using ScorePALServer.Model.PlayedModel;
 
-namespace ScorePALServer.Model.Player;
+namespace ScorePALServer.Model.PlayerModel;
 
-public class Player : IPlayer
+public class Player
 {
     private long id;
     private String firstName;
     private String lastName;
     private DateTime birthDate;
     private Position[] positions;
-    private List<IPlayed> played;
+    private List<Played> played;
 
     public long Id
     {
@@ -41,7 +41,7 @@ public class Player : IPlayer
         set => positions = value;
     }
 
-    public List<IPlayed> Played
+    public List<Played> Played
     {
         get => played;
         set => played = value;

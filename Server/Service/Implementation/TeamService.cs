@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.DAO.Interfaces;
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
 using ScorePALServer.Service.Interfaces;
 

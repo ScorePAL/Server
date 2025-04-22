@@ -1,6 +1,6 @@
 using ScorePALServer.Model.MatchHistoryModel;
 using ScorePALServer.Model.PlayedModel;
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 
 namespace ScorePALServer.Model.MatchModel;
 
@@ -45,13 +45,13 @@ public class MatchCup : IMatch
         set => match.Score2 = value;
     }
 
-    public ITeam Team1
+    public Team Team1
     {
         get => match.Team1;
         set => match.Team1 = value;
     }
 
-    public ITeam Team2
+    public Team Team2
     {
         get => match.Team2;
         set => match.Team2 = value;
@@ -75,7 +75,7 @@ public class MatchCup : IMatch
         set => match.History = value;
     }
 
-    public List<IPlayed> Lineup {
+    public List<Played> Lineup {
         get => match.Lineup;
         set => match.Lineup = value;
     }

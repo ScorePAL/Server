@@ -1,14 +1,14 @@
 using ScorePALServer.Model.MatchHistoryModel;
 using ScorePALServer.Model.PlayedModel;
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 
 namespace ScorePALServer.Model.MatchModel;
 
 public class Match : IMatch
 {
     private long id;
-    private ITeam team1;
-    private ITeam team2;
+    private Team team1;
+    private Team team2;
     private DateTime date;
     private String address;
     private String coach;
@@ -17,7 +17,7 @@ public class Match : IMatch
     private long score1;
     private long score2;
     private List<MatchHistory> history = new();
-    private List<IPlayed> lineup = new();
+    private List<Played> lineup = new();
 
     public long Id
     {
@@ -25,13 +25,13 @@ public class Match : IMatch
         set => id = value;
     }
 
-    public ITeam Team1
+    public Team Team1
     {
         get => team1;
         set => team1 = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public ITeam Team2
+    public Team Team2
     {
         get => team2;
         set => team2 = value ?? throw new ArgumentNullException(nameof(value));
@@ -85,7 +85,7 @@ public class Match : IMatch
         set => history = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public List<IPlayed> Lineup {
+    public List<Played> Lineup {
         get => lineup;
         set => lineup = value ?? throw new ArgumentNullException(nameof(value));
     }

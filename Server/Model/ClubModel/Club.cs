@@ -1,13 +1,13 @@
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 
 namespace ScorePALServer.Model.ClubModel;
 
-public class Club : IClub
+public class Club
 {
     private long id;
     private String name;
     private String logoUrl;
-    private List<ITeam> teams;
+    private List<Team> teams;
 
     public String LogoUrl
     {
@@ -27,7 +27,7 @@ public class Club : IClub
         set => id = value;
     }
 
-    public List<ITeam> Teams
+    public List<Team> Teams
     {
         get => teams;
         set => teams = value;

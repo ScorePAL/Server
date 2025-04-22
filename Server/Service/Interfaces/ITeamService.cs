@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using ScorePALServer.Model.Team;
+using ScorePALServer.Model.TeamModel;
 
 namespace ScorePALServer.Service.Interfaces;
 

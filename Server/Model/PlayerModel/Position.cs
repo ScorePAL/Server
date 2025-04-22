@@ -1,6 +1,4 @@
-using System;
-
-namespace ScorePALServer.Model.Player;
+namespace ScorePALServer.Model.PlayerModel;
 
 public enum Position
 {

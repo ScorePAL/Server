@@ -1,9 +1,9 @@
 using ScorePALServer.Model.MatchModel;
-using ScorePALServer.Model.Player;
+using ScorePALServer.Model.PlayerModel;
 
 namespace ScorePALServer.Model.PlayedModel;
 
-public class Played : IPlayed
+public class Played
 {
     private long id;
     private List<Position> positions;
@@ -18,9 +18,9 @@ public class Played : IPlayed
     private long exitTime;
     private long entryTime;
     private long jerseyNumber;
-    private List<IPenalty> penalties = new();
-    private List<IAssist> assists = new();
-    private IPlayer player;
+    private List<Penalty> penalties = new();
+    private List<Assist> assists = new();
+    private Player player;
     private IMatch match;
 
     public IMatch Match
@@ -29,19 +29,19 @@ public class Played : IPlayed
         set => match = value;
     }
 
-    public List<IPenalty> Penalties
+    public List<Penalty> Penalties
     {
         get => penalties;
         set => penalties = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public List<IAssist> Assists
+    public List<Assist> Assists
     {
         get => assists;
         set => assists = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public IPlayer Player
+    public Player Player
     {
         get => player;
         set => player = value ?? throw new ArgumentNullException(nameof(value));

@@ -1,6 +1,6 @@
 namespace ScorePALServer.Model.PlayedModel;
 
-public class Assist : IAssist
+public class Assist
 {
     private long id;
     private AssistType assistType = AssistType.Pass;
