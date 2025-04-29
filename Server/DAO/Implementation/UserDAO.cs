@@ -13,7 +13,7 @@ public class UserDAO : IUserDAO
     {
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
-            "SELECT * FROM user_authentification WHERE email = @email",
+            "SELECT * FROM users_auth WHERE email = @email",
             new Dictionary<string, object>
             {
                 { "@email", email }
@@ -26,7 +26,7 @@ public class UserDAO : IUserDAO
         }
 
         long userId = conn.ExecuteInsert(
-            "INSERT INTO users (first_name, last_name, role, created_at, related_to) VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
+            "INSERT INTO users (first_name, last_name, role, created_at, club) VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
             new Dictionary<string, object>
             {
                 { "@firstName", firstName },
@@ -38,7 +38,7 @@ public class UserDAO : IUserDAO
         );
 
         conn.ExecuteInsert(
-            "INSERT INTO user_authentification (user_id, email, password, salt) VALUES (@id, @email, @password, @salt)",
+            "INSERT INTO users_auth (user_id, email, password, salt) VALUES (@id, @email, @password, @salt)",
             new Dictionary<string, object>
             {
                 { "@id", userId },
@@ -68,10 +68,10 @@ public class UserDAO : IUserDAO
     {
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
-            "SELECT user_id, password, salt, first_name, last_name, role, created_at, related_to, name, logo_url" +
-            "FROM user_authentification UA " +
+            "SELECT user_id, password, salt, first_name, last_name, role, created_at, club, name, logo_url " +
+            "FROM users_auth UA " +
             "INNER JOIN users U ON U.user_id = UA.user_id " +
-            "INNER JOIN clubs C on C.club_id = U.related_to" +
+            "INNER JOIN clubs C on C.club_id = U.club " +
             "WHERE email = @email",
             new Dictionary<string, object>
             {
@@ -114,7 +114,7 @@ public class UserDAO : IUserDAO
 
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
-            "SELECT salt FROM user_authentification WHERE email = @email",
+            "SELECT salt FROM users_auth WHERE email = @email",
             new Dictionary<string, object>
             {
                 { "@email", email }

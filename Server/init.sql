@@ -151,13 +151,13 @@ create table users
 create index club
     on users (club);
 
-create table users_authentication
+create table users_auth
 (
     user_id  bigint not null
         primary key,
     email    text   not null,
     salt     text   not null,
     password text   not null,
-    constraint users_authentication_ibfk_1
+    constraint users_auth_ibfk_1
         foreign key (user_id) references users (user_id)
 );
