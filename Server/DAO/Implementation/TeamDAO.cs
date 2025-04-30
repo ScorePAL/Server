@@ -91,7 +91,7 @@ public class TeamDAO : ITeamDAO
         }
 
         DataRow row = result.Rows[0];
-        if (user.RelatedTo.Id != Convert.ToInt64(row["club_id"]) || user.Role != Role.Staff && user.Role != Role.Admin)
+        if (user.Club.Id != Convert.ToInt64(row["club_id"]) || user.Role != Role.Staff && user.Role != Role.Admin)
         {
             throw new InvalidPermissionsException("You do not have permission to update this team");
         }

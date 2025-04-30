@@ -38,7 +38,7 @@ public class TokenService : ITokenService
                 new Claim("first_name", user.FirstName),
                 new Claim("last_name", user.LastName),
                 new Claim("role", user.Role.ToString()),
-                new Claim("clubId", user.RelatedTo.Id.ToString())
+                new Claim("clubId", user.Club.Id.ToString())
             ]),
             // Expiration
             Expires = DateTime.UtcNow.AddMinutes(10),
@@ -65,7 +65,7 @@ public class TokenService : ITokenService
                 new Claim("first_name", user.FirstName),
                 new Claim("last_name", user.LastName),
                 new Claim("role", user.Role.ToString()),
-                new Claim("clubId", user.RelatedTo.Id.ToString())
+                new Claim("clubId", user.Club.Id.ToString())
             ]),
             // Expiration
             Expires = DateTime.UtcNow.AddMinutes(1440),
@@ -114,7 +114,7 @@ public class TokenService : ITokenService
             FirstName = claims.FindFirst("first_name")?.Value!,
             LastName = claims.FindFirst("last_name")?.Value!,
             Role = Enum.TryParse(claims.FindFirst("role")?.Value!, out Role role) ? role : Role.Supporter,
-            RelatedTo = new Club
+            Club = new Club
             {
                 Id = claims.FindFirst("clubId") != null ? long.Parse(claims.FindFirst("clubId")?.Value!) : 0
             }

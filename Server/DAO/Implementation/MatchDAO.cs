@@ -38,8 +38,8 @@ public class MatchDAO : IMatchDAO
         long team1ClubId = Convert.ToInt64(result.Rows[0]["t1.club_id"]);
         long team2ClubId = Convert.ToInt64(result.Rows[0]["t2.club_id"]);
 
-        if (team1ClubId != user.RelatedTo.Id &&
-            team2ClubId != user.RelatedTo.Id &&
+        if (team1ClubId != user.Club.Id &&
+            team2ClubId != user.Club.Id &&
             user.Role != Role.Admin)
         {
             return new UnauthorizedResult();
@@ -81,8 +81,8 @@ public class MatchDAO : IMatchDAO
             }
         );
 
-        if (Convert.ToInt64(result.Rows[0]["t1.club_id"]) != user.RelatedTo.Id &&
-            Convert.ToInt64(result.Rows[0]["t2.club_id"]) != user.RelatedTo.Id &&
+        if (Convert.ToInt64(result.Rows[0]["t1.club_id"]) != user.Club.Id &&
+            Convert.ToInt64(result.Rows[0]["t2.club_id"]) != user.Club.Id &&
             user.Role != Role.Admin)
         {
             throw new InvalidPermissionsException("Can't get match for this team");
@@ -208,7 +208,7 @@ public class MatchDAO : IMatchDAO
                 throw new TeamNotFoundException(match.Team1.Id);
             }
 
-            if (result.Rows[0]["club_id"].ToString() == user.RelatedTo.Id.ToString() || user.Role == Role.Admin)
+            if (result.Rows[0]["club_id"].ToString() == user.Club.Id.ToString() || user.Role == Role.Admin)
             {
                 canCreate = true;
             }
@@ -226,7 +226,7 @@ public class MatchDAO : IMatchDAO
                 throw new TeamNotFoundException(match.Team2.Id);
             }
 
-            if (result.Rows[0]["club_id"].ToString() == user.RelatedTo.Id.ToString() || user.Role == Role.Admin)
+            if (result.Rows[0]["club_id"].ToString() == user.Club.Id.ToString() || user.Role == Role.Admin)
             {
                 canCreate = true;
             }

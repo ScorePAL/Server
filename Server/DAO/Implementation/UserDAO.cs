@@ -55,7 +55,7 @@ public class UserDAO : IUserDAO
             LastName = lastName,
             Role = Role.Supporter,
             CreatedAt = DateTime.Now,
-            RelatedTo = new Club
+            Club = new Club
             {
                 Id = clubId
             }
@@ -98,7 +98,7 @@ public class UserDAO : IUserDAO
             LastName = result.Rows[0]["last_name"].ToString() ?? "",
             Role = Enum.Parse<Role>(result.Rows[0]["role"].ToString() ?? ""),
             CreatedAt = Convert.ToDateTime(result.Rows[0]["created_at"]),
-            RelatedTo = new Club
+            Club = new Club
             {
                 Id = Convert.ToInt64(result.Rows[0]["related_to"])
             }
