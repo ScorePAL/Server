@@ -68,7 +68,7 @@ public class UserDAO : IUserDAO
     {
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
-            "SELECT user_id, password, salt, first_name, last_name, role, created_at, club, name, logo_url " +
+            "SELECT UA.user_id, password, salt, first_name, last_name, role, created_at, club, name, logo_url " +
             "FROM users_auth UA " +
             "INNER JOIN users U ON U.user_id = UA.user_id " +
             "INNER JOIN clubs C on C.club_id = U.club " +
