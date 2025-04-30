@@ -9,7 +9,7 @@ public class MySqlController : IDisposable
     private MySqlConnection connection;
 
     /// <summary>
-    /// Création de la connection
+    /// Create a connection to the database
     /// </summary>
     public MySqlController()
     {
@@ -34,11 +34,11 @@ public class MySqlController : IDisposable
     }
 
     /// <summary>
-    /// Exécute une requête
+    /// Execute a query and return the result
     /// </summary>
-    /// <param name="query">Requête</param>
-    /// <param name="parameters">Paramètres</param>
-    /// <returns>La réponse de la bdd</returns>
+    /// <param name="query">Query</param>
+    /// <param name="parameters">Parameters</param>
+    /// <returns>The database response</returns>
     public DataTable ExecuteQuery(string query, Dictionary<string, object> parameters = null)
     {
         connection.Open();
@@ -66,11 +66,11 @@ public class MySqlController : IDisposable
     }
 
     /// <summary>
-    /// Execute un insert et renvoie l'id de celui-ci
+    /// Execute an insert query and return the id of the inserted row
     /// </summary>
-    /// <param name="query">La requête d'insert</param>
-    /// <param name="parameters">Le dictionnaire des paramètres</param>
-    /// <returns>L'id de la ligne inséré</returns>
+    /// <param name="query">The insert query</param>
+    /// <param name="parameters">The parameters</param>
+    /// <returns>The id of the inserted row</returns>
     public long ExecuteInsert(string query, Dictionary<string, object> parameters = null)
     {
         connection.Open();
@@ -95,7 +95,7 @@ public class MySqlController : IDisposable
     }
 
     /// <summary>
-    /// Fermeture
+    /// Close the connection
     /// </summary>
     public void Dispose()
     {

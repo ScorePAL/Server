@@ -77,7 +77,7 @@ app.MapGet("/sse", async (HttpContext ctx,
     await Task.Delay(Timeout.Infinite, token);
 });
 
-// Mapping des contrôleurs REST&
+// Rest controllers Mapping
 app.MapControllers();
 app.UseMiddleware<ErrorHandler>();
 
