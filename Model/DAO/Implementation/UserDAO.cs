@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Model.DAO.Interfaces;
 using Model.Exceptions.User;
 using Model.Logic.ClubModel;
+using Model.Logic.UserModel;
 using ScorePALServer.Model.UserModel;
 
 namespace Model.DAO.Implementation;
@@ -52,14 +53,14 @@ public class UserDAO : IUserDAO
         return new OkObjectResult(user);
     }
 
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId, string salt)
+    public ActionResult RegisterUser(UserRegister userRegister, string salt)
     {
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT * FROM user_authentification WHERE email = @email",
             new Dictionary<string, object>
             {
-                { "@email", email }
+                { "@email", userRegister.Email }
             }
         );
 
@@ -72,11 +73,11 @@ public class UserDAO : IUserDAO
             "INSERT INTO users (first_name, last_name, role, created_at, related_to) VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
             new Dictionary<string, object>
             {
-                { "@firstName", firstName },
-                { "@lastName", lastName },
+                { "@firstName", userRegister.FirstName },
+                { "@lastName", userRegister.LastName },
                 { "@role", Role.Supporter.ToString() },
                 { "@createdAt", DateTime.Now },
-                { "@relatedTo", clubId }
+                { "@relatedTo", userRegister.ClubId }
             }
         );
 
@@ -84,8 +85,8 @@ public class UserDAO : IUserDAO
             new Dictionary<string, object>
             {
                 { "@id", userId },
-                { "@email", email },
-                { "@password", password },
+                { "@email", userRegister.Email },
+                { "@password", userRegister.Password },
                 { "@salt", salt }
             }
         );

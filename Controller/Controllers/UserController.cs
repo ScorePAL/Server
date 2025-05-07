@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Model.Logic.UserModel;
 using ScorePALServer.Service.Interfaces;
 
 namespace ScorePALServerController.Controllers;
@@ -20,9 +21,9 @@ public class UserController
     }
 
     [HttpPost("register")]
-    public ActionResult RegisterUser(string firstName, string lastName, string email, [FromBody] string password, long clubId)
+    public ActionResult RegisterUser(UserRegister userRegister)
     {
-        return service.RegisterUser(firstName, lastName, email, password, clubId);
+        return service.RegisterUser(userRegister);
     }
 
     [HttpPost("login")]

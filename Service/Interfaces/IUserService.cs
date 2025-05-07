@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Model.Logic.UserModel;
 
 namespace ScorePALServer.Service.Interfaces;
 
@@ -14,13 +15,9 @@ public interface IUserService
     /// <summary>
     /// Create a new user
     /// </summary>
-    /// <param name="firstName">The first name of the user</param>
-    /// <param name="lastName">The last name of the user</param>
-    /// <param name="email">The email of the user</param>
-    /// <param name="password">The password of the user</param>
-    /// <param name="clubId">The club id of the user</param>
+    /// <param name="userRegister">Contains all the user info when registering</param>
     /// <returns></returns>
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId);
+    public ActionResult RegisterUser(UserRegister userRegister);
 
     /// <summary>
     /// Make the user login

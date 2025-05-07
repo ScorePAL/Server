@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Model.DAO.Interfaces;
+using Model.Logic.UserModel;
 using Org.BouncyCastle.Security;
 using ScorePALServer.Service.Interfaces;
 
@@ -21,12 +22,15 @@ public class UserService : IUserService
         return dao.GetUserByToken(token);
     }
 
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId)
+    public ActionResult RegisterUser(UserRegister userRegister)
     {
         string salt = GenerateSalt();
-        string hashedPassword = HashPassword(password, salt);
+        string hashedPassword = HashPassword(userRegister.Password, salt);
 
-        return dao.RegisterUser(firstName, lastName, email, hashedPassword, clubId, salt);
+        userRegister.Password = hashedPassword;
+
+
+        return dao.RegisterUser(userRegister, salt);
     }
 
     public ActionResult<Tuple<string, string>> LoginUser(string email, string password)

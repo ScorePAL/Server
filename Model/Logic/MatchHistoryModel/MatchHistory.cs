@@ -1,4 +1,3 @@
-using ScorePALServer.Model.MatchModel;
 using Model.Logic.MatchModel;
 
 namespace Model.Logic.MatchHistoryModel;

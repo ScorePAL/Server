@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Model.Logic.UserModel;
 
 namespace Model.DAO.Interfaces;
 
@@ -14,15 +15,10 @@ public interface IUserDAO
     /// <summary>
     /// Create a new user
     /// </summary>
-    /// <param name="firstName">The first name of the user</param>
-    /// <param name="lastName">The last name of the user</param>
-    /// <param name="email">The email of the user</param>
-    /// <param name="password">The password hashed of the user</param>
-    /// <param name="clubId">The club id of the user</param>
+    /// <param name="userRegister">Contains all the user info when registering</param>
     /// <param name="salt">The salt to recreate the hash password</param>
     /// <returns></returns>
-    public ActionResult RegisterUser(string firstName, string lastName, string email, string password, long clubId,
-        string salt);
+    public ActionResult RegisterUser(UserRegister userRegister, string salt);
 
     /// <summary>
     /// Make the user login
