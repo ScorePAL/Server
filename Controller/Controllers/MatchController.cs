@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Model.Logic.ClubModel;
-using Model.Logic.MatchModel;
+using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.MatchModel;
 using ScorePALServer.Service.Interfaces;
 using ScorePALServerController.Events.Events;
 using ScorePALServerController.SSE;

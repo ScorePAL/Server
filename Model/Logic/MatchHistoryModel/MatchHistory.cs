@@ -1,6 +1,6 @@
-using Model.Logic.MatchModel;
+using ScorePALServerModel.Logic.MatchModel;
 
-namespace Model.Logic.MatchHistoryModel;
+namespace ScorePALServerModel.Logic.MatchHistoryModel;
 
 public class MatchHistory
 {

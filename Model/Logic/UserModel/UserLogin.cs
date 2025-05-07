@@ -1,4 +1,4 @@
-namespace Model.Logic.UserModel;
+namespace ScorePALServerModel.Logic.UserModel;
 
 public record UserLogin
 {

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Model.DAO.Interfaces;
+using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Service.Interfaces;
 

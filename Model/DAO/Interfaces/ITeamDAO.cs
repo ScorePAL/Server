@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.TeamModel;
 
-namespace Model.DAO.Interfaces;
+namespace ScorePALServerModel.DAO.Interfaces;
 
 public interface ITeamDAO
 {

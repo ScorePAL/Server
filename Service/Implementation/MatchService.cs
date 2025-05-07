@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Model.DAO.Interfaces;
-using Model.Logic.ClubModel;
-using Model.Logic.MatchModel;
+using ScorePALServerModel.DAO.Interfaces;
+using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.MatchModel;
 using ScorePALServer.Service.Interfaces;
 
 namespace Service.Implementation;

@@ -1,8 +1,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Model.DAO.Interfaces;
-using Model.Logic.UserModel;
+using ScorePALServerModel.DAO.Interfaces;
+using ScorePALServerModel.Logic.UserModel;
 using Org.BouncyCastle.Security;
 using ScorePALServer.Service.Interfaces;
 

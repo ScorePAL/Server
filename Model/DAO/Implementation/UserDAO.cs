@@ -3,13 +3,13 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Model.DAO.Interfaces;
-using Model.Exceptions.User;
-using Model.Logic.ClubModel;
-using Model.Logic.UserModel;
+using ScorePALServerModel.DAO.Interfaces;
+using ScorePALServerModel.Exceptions.User;
+using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.UserModel;
 using ScorePALServer.Model.UserModel;
 
-namespace Model.DAO.Implementation;
+namespace ScorePALServerModel.DAO.Implementation;
 
 public class UserDAO : IUserDAO
 {

@@ -1,13 +1,13 @@
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
-using Model.DAO.Interfaces;
-using Model.Exceptions.Team;
-using Model.Exceptions.User;
-using Model.Logic.ClubModel;
+using ScorePALServerModel.DAO.Interfaces;
+using ScorePALServerModel.Exceptions.Team;
+using ScorePALServerModel.Exceptions.User;
+using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
 
-namespace Model.DAO.Implementation;
+namespace ScorePALServerModel.DAO.Implementation;
 
 public class TeamDAO : ITeamDAO
 {

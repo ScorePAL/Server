@@ -1,7 +1,7 @@
 using System.Data;
 using MySqlConnector;
 
-namespace Model.DAO;
+namespace ScorePALServerModel.DAO;
 
 public class MySqlController : IDisposable
 {

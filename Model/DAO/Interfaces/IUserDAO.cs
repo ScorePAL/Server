@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Model.Logic.UserModel;
+using ScorePALServerModel.Logic.UserModel;
 
-namespace Model.DAO.Interfaces;
+namespace ScorePALServerModel.DAO.Interfaces;
 
 public interface IUserDAO
 {

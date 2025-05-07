@@ -1,6 +1,6 @@
 using ScorePALServer.Model.TeamModel;
 
-namespace Model.Logic.ClubModel;
+namespace ScorePALServerModel.Logic.ClubModel;
 
 public class Club
 {

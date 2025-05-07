@@ -1,4 +1,4 @@
-namespace Model.Logic.MatchModel;
+namespace ScorePALServerModel.Logic.MatchModel;
 
 public enum Scale
 {

@@ -1,6 +1,6 @@
-using Model.DAO.Implementation;
-using Model.DAO.Interfaces;
-using Model.Exceptions;
+using ScorePALServerModel.DAO.Implementation;
+using ScorePALServerModel.DAO.Interfaces;
+using ScorePALServerModel.Exceptions;
 using ScorePALServer.Service.Interfaces;
 using ScorePALServerController.SSE;
 using Service.Implementation;

@@ -1,4 +1,4 @@
-namespace Model.Exceptions;
+namespace ScorePALServerModel.Exceptions;
 
 /// <summary>
 /// Generic exception for the API

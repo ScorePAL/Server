@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Model.Logic.MatchModel;
+using ScorePALServerModel.Logic.MatchModel;
 
 namespace ScorePALServerController.Events.Events;
 

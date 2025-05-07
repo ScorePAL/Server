@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Model.Logic.ClubModel;
-using Model.Logic.MatchModel;
+using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.MatchModel;
 
-namespace Model.DAO.Interfaces;
+namespace ScorePALServerModel.DAO.Interfaces;
 
 public interface IMatchDao
 {

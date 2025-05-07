@@ -1,4 +1,4 @@
-namespace Model.Logic.MatchHistoryModel;
+namespace ScorePALServerModel.Logic.MatchHistoryModel;
 
 public enum MatchEvent
 {

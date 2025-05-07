@@ -1,8 +1,8 @@
 using ScorePALServer.Model.PlayedModel;
 using ScorePALServer.Model.TeamModel;
-using Model.Logic.MatchHistoryModel;
+using ScorePALServerModel.Logic.MatchHistoryModel;
 
-namespace Model.Logic.MatchModel;
+namespace ScorePALServerModel.Logic.MatchModel;
 
 public interface IMatch
 {

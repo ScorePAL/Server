@@ -2,7 +2,7 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 
-namespace Model.Exceptions;
+namespace ScorePALServerModel.Exceptions;
 
 public class ErrorHandler
 {
