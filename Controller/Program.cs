@@ -2,7 +2,7 @@ using Model.DAO.Implementation;
 using Model.DAO.Interfaces;
 using Model.Exceptions;
 using ScorePALServer.Service.Interfaces;
-using ScorePALServer.SSE;
+using ScorePALServerController.SSE;
 using Service.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);

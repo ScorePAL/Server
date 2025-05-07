@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Service.Interfaces;
 
-namespace ScorePALServer.Controllers;
+namespace ScorePALServerController.Controllers;
 
 [Route("/api/team")]
 public class TeamController

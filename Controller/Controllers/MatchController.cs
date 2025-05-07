@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Model.Logic.ClubModel;
-using ScorePALServer.Service.Interfaces;
-using ScorePALServer.SSE;
 using Model.Logic.MatchModel;
+using ScorePALServer.Service.Interfaces;
 using ScorePALServerController.Events.Events;
+using ScorePALServerController.SSE;
 
-namespace ScorePALServer.Controllers;
+namespace ScorePALServerController.Controllers;
 
 [Route("api/match")]
 public class MatchController

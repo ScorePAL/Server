@@ -1,7 +1,8 @@
 using Microsoft.Net.Http.Headers;
+using ScorePALServerController.Events;
 using ScorePALServerController.Events.Events;
 
-namespace ScorePALServer.SSE;
+namespace ScorePALServerController.SSE;
 public interface IEventPublisher
     {
         Task PublishEvent<TEvent>(TEvent @event, IEnumerable<long> clubIds) where TEvent : class;

@@ -1,6 +1,4 @@
-using Newtonsoft.Json;
-
-namespace ScorePALServer.SSE;
+namespace ScorePALServerController.Events;
 
 public interface Event
 {

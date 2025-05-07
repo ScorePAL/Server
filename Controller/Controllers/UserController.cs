@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Service.Interfaces;
 
-namespace ScorePALServer.Controllers;
+namespace ScorePALServerController.Controllers;
 
 [Route("api/user")]
 public class UserController

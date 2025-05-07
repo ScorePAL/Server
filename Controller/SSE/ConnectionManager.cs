@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
-using Microsoft.AspNetCore.Authentication;
 
-namespace ScorePALServer.SSE;
+namespace ScorePALServerController.SSE;
 
 public interface IConnectionManager
 {
