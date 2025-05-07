@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Logic.UserModel;
 using Org.BouncyCastle.Security;
-using ScorePALServer.Service.Interfaces;
+using ScorePALServerService.Interfaces;
 
-namespace Service.Implementation;
+namespace ScorePALServerService.Implementation;
 
 public class UserService : IUserService
 {

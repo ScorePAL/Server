@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.Logic.UserModel;
 
-namespace ScorePALServer.Service.Interfaces;
+namespace ScorePALServerService.Interfaces;
 
 public interface IUserService
 {

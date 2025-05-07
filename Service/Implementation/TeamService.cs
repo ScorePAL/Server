@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServer.Model.TeamModel;
-using ScorePALServer.Service.Interfaces;
+using ScorePALServerService.Interfaces;
 
-namespace Service.Implementation;
+namespace ScorePALServerService.Implementation;
 
 public class TeamService : ITeamService
 {

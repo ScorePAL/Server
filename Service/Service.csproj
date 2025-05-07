@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
         <Company>ScorePAL</Company>
         <Product>ScorePALServerService</Product>
+        <AssemblyName>ScorePALServerService</AssemblyName>
+        <RootNamespace>ScorePALServerService</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

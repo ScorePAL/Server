@@ -1,4 +1,4 @@
-namespace ScorePALServer.Service.Interfaces;
+namespace ScorePALServerService.Interfaces;
 
 public interface ICounterService
 {

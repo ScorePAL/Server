@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.TeamModel;
 
-namespace ScorePALServer.Service.Interfaces;
+namespace ScorePALServerService.Interfaces;
 
 public interface ITeamService
 {

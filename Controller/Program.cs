@@ -1,9 +1,9 @@
 using ScorePALServerModel.DAO.Implementation;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Exceptions;
-using ScorePALServer.Service.Interfaces;
 using ScorePALServerController.SSE;
-using Service.Implementation;
+using ScorePALServerService.Implementation;
+using ScorePALServerService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.Logic.ClubModel;
-using ScorePALServer.Model.MatchModel;
 using ScorePALServerModel.Logic.MatchModel;
 
-namespace ScorePALServer.Service.Interfaces;
+namespace ScorePALServerService.Interfaces;
 
 public interface IMatchService
 {

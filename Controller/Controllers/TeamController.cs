@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.TeamModel;
-using ScorePALServer.Service.Interfaces;
+using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerController.Controllers;
 
