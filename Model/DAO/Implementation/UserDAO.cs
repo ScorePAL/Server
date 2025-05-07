@@ -94,31 +94,31 @@ public class UserDAO : IUserDAO
         return new OkResult();
     }
 
-    public ActionResult<Tuple<String, String>> LoginUser(string email, string password)
+    public ActionResult<Tuple<string, string>> LoginUser(UserLogin userLogin)
     {
         using var conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT user_id, password, salt FROM user_authentification WHERE email = @email",
             new Dictionary<string, object>
             {
-                { "@email", email }
+                { "@email", userLogin.Email }
             }
         );
 
         if (result.Rows.Count == 0)
         {
-            throw new UserNotFoundException(email);
+            throw new UserNotFoundException(userLogin.Email);
         }
 
         string hashedPassword = result.Rows[0]["password"].ToString() ?? "";
 
-        if (!hashedPassword.SequenceEqual(password))
+        if (!hashedPassword.SequenceEqual(userLogin.Password))
         {
             throw new InvalidPasswordException();
         }
 
-        string token = GenerateJwtToken(email, 10);
-        string refreshToken = GenerateJwtToken(email, 45);
+        string token = GenerateJwtToken(userLogin.Email, 10);
+        string refreshToken = GenerateJwtToken(userLogin.Email, 45);
         conn.ExecuteInsert("INSERT INTO user_tokens (user_id, token, refresh_token) VALUES (@id, @token, @refreshToken)",
             new Dictionary<string, object>
             {

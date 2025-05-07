@@ -23,10 +23,9 @@ public interface IUserDAO
     /// <summary>
     /// Make the user login
     /// </summary>
-    /// <param name="email">The user's email</param>
-    /// <param name="password">The user's password</param>
+    /// <param name="userLogin"></param>
     /// <returns></returns>
-    public ActionResult<Tuple<string, string>> LoginUser(string email, string password);
+    public ActionResult<Tuple<string, string>> LoginUser(UserLogin userLogin);
 
     /// <summary>
     /// Generate a new token for the user

@@ -33,18 +33,19 @@ public class UserService : IUserService
         return dao.RegisterUser(userRegister, salt);
     }
 
-    public ActionResult<Tuple<string, string>> LoginUser(string email, string password)
+    public ActionResult<Tuple<string, string>> LoginUser(UserLogin userLogin)
     {
-        string salt = dao.GetSaltBuYser(email);
+        string salt = dao.GetSaltBuYser(userLogin.Email);
 
         if (salt == "")
         {
             return new BadRequestResult();
         }
 
-        var hashedPassword = HashPassword(password, salt);
+        var hashedPassword = HashPassword(userLogin.Password, salt);
+        userLogin.Password = hashedPassword;
 
-        return dao.LoginUser(email, hashedPassword);
+        return dao.LoginUser(userLogin);
     }
 
     public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)

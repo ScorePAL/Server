@@ -27,9 +27,9 @@ public class UserController
     }
 
     [HttpPost("login")]
-    public ActionResult<Tuple<string, string>> LoginUser(string email, [FromBody] string password)
+    public ActionResult<Tuple<string, string>> LoginUser(UserLogin userLogin)
     {
-        return service.LoginUser(email, password);
+        return service.LoginUser(userLogin);
     }
 
     [HttpGet("new-token")]
