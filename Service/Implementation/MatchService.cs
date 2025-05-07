@@ -19,9 +19,9 @@ public class MatchService : IMatchService
         return dao.UpdateMatchScore(token, matchId);
     }
 
-    public ActionResult<Match?> GetMatch(string token, long matchId)
+    public ActionResult<Match?> GetMatch(string token, Match match)
     {
-        return dao.GetMatch(token, matchId);
+        return dao.GetMatch(token, match);
     }
 
     public ActionResult<List<Match>> GetAllMatches(string token, long page, long limit)

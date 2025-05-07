@@ -17,9 +17,9 @@ public interface IMatchService
     /// Get a match by its id.
     /// </summary>
     /// <param name="token">The user's token</param>
-    /// <param name="matchId">The match id</param>
+    /// <param name="match"></param>
     /// <returns>The match</returns>
-    ActionResult<Match?> GetMatch(string token, long matchId);
+    ActionResult<Match?> GetMatch(string token, Match match);
 
     /// <summary>
     /// Get all matches by page.

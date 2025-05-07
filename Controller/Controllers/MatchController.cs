@@ -33,9 +33,9 @@ public class MatchController
     }
 
     [HttpGet("{matchId}")]
-    public ActionResult<Match?> GetMatch(string token, long matchId)
+    public ActionResult<Match?> GetMatch(string token, Match match)
     {
-        return service.GetMatch(token, matchId);
+        return service.GetMatch(token, match);
     }
 
     [HttpGet("all")]

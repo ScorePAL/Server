@@ -80,7 +80,7 @@ public class MatchDAO : IMatchDao
         return clubs;
     }
 
-    public ActionResult<Match?> GetMatch(string token, long matchId)
+    public ActionResult<Match?> GetMatch(string token, Match match)
     {
         UserDAO userDao = new UserDAO();
         ActionResult r = userDao.GetUserByToken(token);
@@ -90,7 +90,7 @@ public class MatchDAO : IMatchDao
         }
 
 
-        Match? match = null;
+        Match? matchResult = null;
         if (user.Value != null)
         {
             User u = (User)user.Value;
@@ -104,7 +104,7 @@ public class MatchDAO : IMatchDao
                 "WHERE m.match_id = @matchId",
                 new Dictionary<string, object>
                 {
-                    { "@matchId", matchId }
+                    { "@matchId", match.Id }
                 }
             );
 
@@ -117,11 +117,11 @@ public class MatchDAO : IMatchDao
 
             if (result.Rows.Count == 0)
             {
-                throw new MatchNotFoundException(matchId);
+                throw new MatchNotFoundException(match.Id);
 
             }
 
-            match = new Match
+            matchResult = new Match
             {
                 Id = Convert.ToInt32(result.Rows[0]["id"]),
                 Team1 = new Team
@@ -155,7 +155,7 @@ public class MatchDAO : IMatchDao
             };
         }
 
-        return new OkObjectResult(match);
+        return new OkObjectResult(matchResult);
     }
 
     public ActionResult<List<Match>> GetAllMatches(string token, long page, long limit)
