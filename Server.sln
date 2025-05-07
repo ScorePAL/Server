@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{F52523F5-A6B8-4C63-ADBB-11AA2D25AC51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Controller\Controller.csproj", "{F52523F5-A6B8-4C63-ADBB-11AA2D25AC51}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82A703AC-EDE1-4421-8F5C-5B0ACB27D007}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{1BD5651C-3871-4AB1-B288-BAEB68B578DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{4196B381-379D-4354-8CC0-66E085703F97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,5 +21,15 @@ Global
 		{F52523F5-A6B8-4C63-ADBB-11AA2D25AC51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F52523F5-A6B8-4C63-ADBB-11AA2D25AC51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F52523F5-A6B8-4C63-ADBB-11AA2D25AC51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BD5651C-3871-4AB1-B288-BAEB68B578DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BD5651C-3871-4AB1-B288-BAEB68B578DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BD5651C-3871-4AB1-B288-BAEB68B578DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BD5651C-3871-4AB1-B288-BAEB68B578DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4196B381-379D-4354-8CC0-66E085703F97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4196B381-379D-4354-8CC0-66E085703F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4196B381-379D-4354-8CC0-66E085703F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4196B381-379D-4354-8CC0-66E085703F97}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
