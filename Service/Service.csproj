@@ -13,7 +13,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Isopoh.Cryptography.Argon2" Version="2.0.0" />
+      <Reference Include="BouncyCastle.Cryptography">
+        <HintPath>..\..\..\.nuget\packages\bouncycastle.cryptography\2.5.0\lib\net6.0\BouncyCastle.Cryptography.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Model.DAO.Interfaces;
+using Org.BouncyCastle.Security;
 using ScorePALServer.Service.Interfaces;
 
 namespace Service.Implementation;
