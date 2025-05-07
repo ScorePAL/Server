@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Model.Logic.ClubModel;
 using ScorePALServer.Model.MatchModel;
 using Model.Logic.MatchModel;
 
@@ -44,5 +45,5 @@ public interface IMatchService
     /// <param name="token">The user's token</param>
     /// <param name="clubId">The club's id</param>
     /// <returns></returns>
-    ActionResult<List<Match>> GetClubMatches([FromBody] string token, long clubId);
+    ActionResult<List<Match>> GetClubMatches([FromBody] string token, Club clubId);
 }

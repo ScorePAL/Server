@@ -314,7 +314,7 @@ public class MatchDAO : IMatchDao
         return new OkObjectResult(matchId);
     }
 
-    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    public ActionResult<List<Match>> GetClubMatches(string token, Club club)
     {
         UserDAO userDao = new UserDAO();
         ActionResult r = userDao.GetUserByToken(token);
@@ -337,7 +337,7 @@ public class MatchDAO : IMatchDao
                 "ORDER BY m.date DESC",
                 new Dictionary<string, object>
                 {
-                    { "@clubId", clubId }
+                    { "@clubId", club.Id }
                 }
             );
 

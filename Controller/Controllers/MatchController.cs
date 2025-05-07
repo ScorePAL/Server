@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Model.Logic.ClubModel;
 using ScorePALServer.Service.Interfaces;
 using ScorePALServer.SSE;
 using Model.Logic.MatchModel;
@@ -32,7 +33,7 @@ public class MatchController
         return result is OkObjectResult ? new OkResult() : result;
     }
 
-    [HttpGet("{matchId}")]
+    [HttpPost("{matchId}")]
     public ActionResult<Match?> GetMatch(string token, Match match)
     {
         return service.GetMatch(token, match);
@@ -45,14 +46,14 @@ public class MatchController
     }
 
     [HttpPost("create")]
-    public ActionResult<long> CreateMatch([FromBody] string token, [FromBody] Match match)
+    public ActionResult<long> CreateMatch([FromBody] string token, Match match)
     {
         return service.CreateMatch(token, match);
     }
 
-    [HttpGet("club/{clubId}")]
-    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    [HttpPost("club/{clubId}")]
+    public ActionResult<List<Match>> GetClubMatches(string token, Club club)
     {
-        return service.GetClubMatches(token, clubId);
+        return service.GetClubMatches(token, club);
     }
 }

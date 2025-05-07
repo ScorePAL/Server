@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Model.DAO.Interfaces;
+using Model.Logic.ClubModel;
 using Model.Logic.MatchModel;
 using ScorePALServer.Service.Interfaces;
 
@@ -34,8 +35,8 @@ public class MatchService : IMatchService
         return dao.CreateMatch(token, match);
     }
 
-    public ActionResult<List<Match>> GetClubMatches(string token, long clubId)
+    public ActionResult<List<Match>> GetClubMatches(string token, Club club)
     {
-        return dao.GetClubMatches(token, clubId);
+        return dao.GetClubMatches(token, club);
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Model.Logic.ClubModel;
 using Model.Logic.MatchModel;
 
 namespace Model.DAO.Interfaces;
@@ -43,5 +44,5 @@ public interface IMatchDao
     /// <param name="token">The user's token</param>
     /// <param name="clubId">The club's id</param>
     /// <returns></returns>
-    ActionResult<List<Match>> GetClubMatches(string token, long clubId);
+    ActionResult<List<Match>> GetClubMatches(string token, Club clubId);
 }
