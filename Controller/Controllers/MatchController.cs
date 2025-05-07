@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ScorePALServer.Model.MatchModel;
 using ScorePALServer.Service.Interfaces;
 using ScorePALServer.SSE;
-using ScorePALServer.SSE.Events;
 using Model.Logic.MatchModel;
+using ScorePALServerController.Events.Events;
 
 namespace ScorePALServer.Controllers;
 
@@ -20,15 +19,15 @@ public class MatchController
     }
 
     [HttpPut("update-score/{matchId}")]
-    public async Task<IActionResult> UpdateScore([FromBody] string token, long matchId, int scoreTeam1, int scoreTeam2)
+    public async Task<IActionResult> UpdateScore([FromBody] string token, Match match)
     {
-        var result = service.UpdateMatchScore(token, matchId, scoreTeam1, scoreTeam2);
+        var result = service.UpdateMatchScore(token, match);
         if (result is OkObjectResult)
         {
             var response = (OkObjectResult) result;
             var clubs = (List<long>) response.Value!;
 
-            await eventPublisher.PublishEvent(new ScoreUpdatedEvent(matchId, scoreTeam1, scoreTeam2), clubs);
+            await eventPublisher.PublishEvent(new ScoreUpdatedEvent(match), clubs);
         }
         return result is OkObjectResult ? new OkResult() : result;
     }

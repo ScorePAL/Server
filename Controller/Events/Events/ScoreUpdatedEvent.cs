@@ -1,8 +1,10 @@
 using System.Text.Json;
+using Model.Logic.MatchModel;
+using ScorePALServer.SSE;
 
-namespace ScorePALServer.SSE.Events;
+namespace ScorePALServerController.Events.Events;
 
-public record ScoreUpdatedEvent(long MatchId, int ScoreTeam1, int ScoreTeam2);
+public record ScoreUpdatedEvent(Match Match);
 
 public class ScoreUpdatedEventMessage : Event
 {

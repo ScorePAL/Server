@@ -1,5 +1,5 @@
 using Microsoft.Net.Http.Headers;
-using ScorePALServer.SSE.Events;
+using ScorePALServerController.Events.Events;
 
 namespace ScorePALServer.SSE;
 public interface IEventPublisher

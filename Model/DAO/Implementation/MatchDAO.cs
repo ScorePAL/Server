@@ -13,8 +13,9 @@ namespace Model.DAO.Implementation;
 
 public class MatchDAO : IMatchDao
 {
-    public ActionResult UpdateMatchScore(string token, long matchId, int scoreTeam1, int scoreTeam2)
+    public ActionResult UpdateMatchScore(string token, Match match)
     {
+        long matchId = match.Id;
         UserDAO userDao = new UserDAO();
         ActionResult r = userDao.GetUserByToken(token);
         if (r is not OkObjectResult user)
@@ -59,8 +60,8 @@ public class MatchDAO : IMatchDao
                 "UPDATE `match` SET score_team1 = @scoreTeam1, score_team2 = @scoreTeam2 WHERE match_id = @matchId",
                 new Dictionary<string, object>
                 {
-                    { "@scoreTeam1", scoreTeam1 },
-                    { "@scoreTeam2", scoreTeam2 },
+                    { "@scoreTeam1", match.Score1 },
+                    { "@scoreTeam2", match.Score2 },
                     { "@matchId", matchId }
                 }
             );
