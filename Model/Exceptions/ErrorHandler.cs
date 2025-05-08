@@ -38,7 +38,7 @@ public class ErrorHandler
 
                 default: // Gestion des exceptions générales
                     statusCode = (int)HttpStatusCode.InternalServerError;
-                    message = "Une erreur interne s'est produite.";
+                    message = "Internal server error.";
                     break;
 
             }
