@@ -19,9 +19,9 @@ public class TeamService : ITeamService
         return dao.GetTeams(token, page, limit);
     }
 
-    public ActionResult<Team> GetTeam(string token, long id)
+    public ActionResult<Team> GetTeam(string token, Team team)
     {
-        return dao.GetTeam(token, id);
+        return dao.GetTeam(token, team);
     }
 
     public ActionResult CreateTeam(string token, string name, long clubId)

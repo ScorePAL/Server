@@ -18,9 +18,9 @@ public interface ITeamDAO
     /// Returns a team by its id
     /// </summary>
     /// <param name="token">The user's token</param>
-    /// <param name="id">The team id</param>
+    /// <param name="team">The team id</param>
     /// <returns>The team</returns>
-    public ActionResult<Team> GetTeam(string token, long id);
+    public ActionResult<Team> GetTeam(string token, Team team);
 
     /// <summary>
     /// Create a team with the given name and club id

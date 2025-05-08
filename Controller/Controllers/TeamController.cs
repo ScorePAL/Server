@@ -20,10 +20,10 @@ public class TeamController
         return service.GetTeams(token, page, limit);
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<Team> GetTeam(string token, long id)
+    [HttpPost("{id}")]
+    public ActionResult<Team> GetTeam(string token, Team team)
     {
-        return service.GetTeam(token, id);
+        return service.GetTeam(token, team);
     }
 
     [HttpPost("create")]
