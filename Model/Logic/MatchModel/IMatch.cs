@@ -12,7 +12,6 @@ public interface IMatch
     long Score2 { get; set; }
     String Address { get; set; }
     DateTime Date { get; set; }
-    bool IsHome { get; set; }
     String Coach { get; set; }
     MatchState State { get; set; }
     DateTime StartedTime { get; set; }

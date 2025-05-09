@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Logic.UserModel;
 using Org.BouncyCastle.Security;
+using ScorePALServer.Model.UserModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
@@ -11,18 +13,15 @@ namespace ScorePALServerService.Implementation;
 public class UserService : IUserService
 {
     private readonly IUserDAO dao;
+    private readonly ITokenService tokenService;
 
-    public UserService(IUserDAO dao)
+    public UserService(IUserDAO dao, ITokenService tokenService)
     {
         this.dao = dao;
+        this.tokenService = tokenService;
     }
 
-    public ActionResult GetUserByToken(string token)
-    {
-        return dao.GetUserByToken(token);
-    }
-
-    public ActionResult RegisterUser(UserRegister userRegister)
+    public User RegisterUser(UserRegister userRegister)
     {
         string salt = GenerateSalt();
         string hashedPassword = HashPassword(userRegister.Password, salt);
@@ -30,12 +29,19 @@ public class UserService : IUserService
         userRegister.Password = hashedPassword;
 
 
-        return dao.RegisterUser(userRegister, salt);
+        User user = dao.RegisterUser(userRegister, salt);
+
+        string token = tokenService.Create(user);
+        string refreshToken = tokenService.CreateRefresh(user);
+        user.Token = token;
+        user.RefreshToken = refreshToken;
+
+        return user;
     }
 
-    public ActionResult<Tuple<string, string>> LoginUser(UserLogin userLogin)
+    public ActionResult<User> LoginUser(UserLogin userLogin)
     {
-        string salt = dao.GetSaltBuYser(userLogin.Email);
+        string salt = dao.GetSaltByUser(userLogin.Email);
 
         if (salt == "")
         {
@@ -45,12 +51,32 @@ public class UserService : IUserService
         var hashedPassword = HashPassword(userLogin.Password, salt);
         userLogin.Password = hashedPassword;
 
-        return dao.LoginUser(userLogin);
+        User user = dao.LoginUser(userLogin);
+
+        string token = tokenService.Create(user);
+        string refreshToken = tokenService.CreateRefresh(user);
+
+        user.Token = token;
+        user.RefreshToken = refreshToken;
+
+        return user;
     }
 
-    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    public ActionResult<string> GenerateNewToken(ClaimsPrincipal claims)
     {
-        return dao.GenerateNewToken(refreshtoken);
+        var user = tokenService.ExtractUser(claims);
+
+        string token = tokenService.CreateRefresh(user);
+        return token;
+    }
+
+    public ActionResult ResetPassword(string email)
+    {
+        var token = tokenService.CreateResetPasswordToken(email);
+
+        // TODO : Send email
+
+        return new OkObjectResult(token);
     }
 
 
@@ -62,8 +88,8 @@ public class UserService : IUserService
     /// <returns>The hashed password</returns>
     private string HashPassword(string password, string salt)
     {
-        SHA256 SHAHasher = SHA256.Create();
-        var hashed = SHAHasher.ComputeHash(Encoding.UTF8.GetBytes(salt + password));
+        SHA256 shaHasher = SHA256.Create();
+        var hashed = shaHasher.ComputeHash(Encoding.UTF8.GetBytes(salt + password));
         return Convert.ToBase64String(hashed);
     }
 

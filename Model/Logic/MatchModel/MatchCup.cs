@@ -5,10 +5,20 @@ using ScorePALServerModel.Logic.MatchHistoryModel;
 
 namespace ScorePALServerModel.Logic.MatchModel;
 
-public class MatchCup(Cup cup, IMatch match) : IMatch
+public class MatchCup : IMatch
 {
-    private Cup cup = cup;
-    private IMatch match = match;
+    private Cup cup;
+    private IMatch match;
+
+    public MatchCup(Cup cup, IMatch match)
+    {
+        this.cup = cup;
+        this.match = match;
+    }
+
+    public MatchCup()
+    {
+    }
 
     public DateTime StartedTime
     {
@@ -26,12 +36,6 @@ public class MatchCup(Cup cup, IMatch match) : IMatch
     {
         get => match.Coach;
         set => match.Coach = value;
-    }
-
-    public bool IsHome
-    {
-        get => match.IsHome;
-        set => match.IsHome = value;
     }
 
     public DateTime Date

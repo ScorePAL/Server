@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using ScorePALServer.Model.UserModel;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServerModel.Logic.MatchModel;
@@ -9,34 +11,39 @@ namespace ScorePALServerService.Implementation;
 public class MatchService : IMatchService
 {
     private IMatchDao dao;
+    private ITokenService tokenService;
 
-    public MatchService(IMatchDao dao)
+    public MatchService(IMatchDao dao, ITokenService tokenService)
     {
         this.dao = dao;
+        this.tokenService = tokenService;
     }
 
-    public ActionResult UpdateMatchScore(string token, Match matchId)
+    public ActionResult UpdateMatchScore(ClaimsPrincipal claims, Match match)
     {
-        return dao.UpdateMatchScore(token, matchId);
+        User user = tokenService.ExtractUser(claims);
+        return dao.UpdateMatchScore(user, match);
     }
 
-    public ActionResult<Match?> GetMatch(string token, Match match)
+    public ActionResult<Match?> GetMatch(ClaimsPrincipal claims, Match match)
     {
-        return dao.GetMatch(token, match);
+        User user = tokenService.ExtractUser(claims);
+        return dao.GetMatch(user, match);
     }
 
-    public ActionResult<List<Match>> GetAllMatches(string token, long page, long limit)
+    public ActionResult<Match[]> GetAllMatches(long page, long limit)
     {
-        return dao.GetAllMatches(token, page, limit);
+        return dao.GetAllMatches(page, limit);
     }
 
-    public ActionResult<long> CreateMatch(string token, Match match)
+    public ActionResult<long> CreateMatch(ClaimsPrincipal claims, Match match)
     {
-        return dao.CreateMatch(token, match);
+        User user = tokenService.ExtractUser(claims);
+        return dao.CreateMatch(user, match);
     }
 
-    public ActionResult<List<Match>> GetClubMatches(string token, Club club)
+    public ActionResult<Match[]> GetClubMatches(Club club)
     {
-        return dao.GetClubMatches(token, club);
+        return dao.GetClubMatches(club);
     }
 }

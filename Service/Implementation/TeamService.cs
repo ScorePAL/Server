@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServer.Model.TeamModel;
+using ScorePALServer.Model.UserModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
@@ -8,34 +10,28 @@ namespace ScorePALServerService.Implementation;
 public class TeamService : ITeamService
 {
     private ITeamDAO dao;
+    private ITokenService tokenService;
 
-    public TeamService(ITeamDAO dao)
+    public TeamService(ITeamDAO dao, ITokenService tokenService)
     {
         this.dao = dao;
+        this.tokenService = tokenService;
     }
 
-    public ActionResult<List<Team>> GetTeams(string token, long page, long limit)
+    public ActionResult<Team[]> GetTeams(long page, long limit)
     {
-        return dao.GetTeams(token, page, limit);
+        return dao.GetTeams(page, limit);
     }
+
 
     public ActionResult<Team> GetTeam(string token, Team team)
     {
         return dao.GetTeam(token, team);
     }
 
-    public ActionResult CreateTeam(string token, string name, long clubId)
+    public ActionResult UpdateTeam(ClaimsPrincipal claims, long id, string name)
     {
-        return dao.CreateTeam(token, name, clubId);
-    }
-
-    public ActionResult UpdateTeam(string token, long id, string name)
-    {
-        return dao.UpdateTeam(token, id, name);
-    }
-
-    public ActionResult DeleteTeam(string token, long id)
-    {
-        return dao.DeleteTeam(token, id);
+        User user = tokenService.ExtractUser(claims);
+        return dao.UpdateTeam(user, id, name);
     }
 }

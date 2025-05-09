@@ -1,4 +1,5 @@
 using System.Data;
+using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 
 namespace ScorePALServerModel.DAO;
@@ -9,28 +10,36 @@ public class MySqlController : IDisposable
     private MySqlConnection connection;
 
     /// <summary>
-    /// Création de la connection
+    /// Create a connection to the database
     /// </summary>
     public MySqlController()
     {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory()) // racine du projet
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
         string connectionString = new MySqlConnectionStringBuilder
         {
+            // Utilisation du container pour facilement changer de bdd, pour le reste utiliser les variables d'environnement
             Server = Environment.GetEnvironmentVariable("DB_HOST"),
-            UserID = Environment.GetEnvironmentVariable("DB_USER"),
-            Password = Environment.GetEnvironmentVariable("DB_PASSWORD"),
-            Database = Environment.GetEnvironmentVariable("DB_NAME"),
-            Port = uint.Parse(Environment.GetEnvironmentVariable("DB_PORT") ?? throw new InvalidOperationException())
+            UserID = configuration.GetConnectionString("DB_USER"),
+            Password = configuration.GetConnectionString("DB_PASSWORD"),
+            Database = configuration.GetConnectionString("DB_NAME"),
+            Port = uint.Parse(configuration.GetConnectionString("DB_PORT") ?? throw new InvalidOperationException())
         }.ConnectionString;
 
         connection = new MySqlConnection(connectionString);
     }
 
     /// <summary>
-    /// Exécute une requête
+    /// Execute a query and return the result
     /// </summary>
-    /// <param name="query">Requête</param>
-    /// <param name="parameters">Paramètres</param>
-    /// <returns>La réponse de la bdd</returns>
+    /// <param name="query">Query</param>
+    /// <param name="parameters">Parameters</param>
+    /// <returns>The database response</returns>
     public DataTable ExecuteQuery(string query, Dictionary<string, object> parameters = null)
     {
         connection.Open();
@@ -58,11 +67,11 @@ public class MySqlController : IDisposable
     }
 
     /// <summary>
-    /// Execute un insert et renvoie l'id de celui-ci
+    /// Execute an insert query and return the id of the inserted row
     /// </summary>
-    /// <param name="query">La requête d'insert</param>
-    /// <param name="parameters">Le dictionnaire des paramètres</param>
-    /// <returns>L'id de la ligne inséré</returns>
+    /// <param name="query">The insert query</param>
+    /// <param name="parameters">The parameters</param>
+    /// <returns>The id of the inserted row</returns>
     public long ExecuteInsert(string query, Dictionary<string, object> parameters = null)
     {
         connection.Open();
@@ -87,7 +96,7 @@ public class MySqlController : IDisposable
     }
 
     /// <summary>
-    /// Fermeture
+    /// Close the connection
     /// </summary>
     public void Dispose()
     {

@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScorePALServer.Model.UserModel;
 using ScorePALServerModel.Logic.UserModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerController.Controllers;
 
 [Route("api/user")]
-public class UserController
+public class UserController : ControllerBase
 {
     private readonly IUserService service;
 
@@ -14,27 +16,28 @@ public class UserController
         this.service = service;
     }
 
-    [HttpGet("{token}")]
-    public ActionResult GetUserByToken(string token)
-    {
-        return service.GetUserByToken(token);
-    }
-
     [HttpPost("register")]
-    public ActionResult RegisterUser(UserRegister userRegister)
+    public User RegisterUser(UserRegister userRegister)
     {
         return service.RegisterUser(userRegister);
     }
 
     [HttpPost("login")]
-    public ActionResult<Tuple<string, string>> LoginUser(UserLogin userLogin)
+    public ActionResult<User> LoginUser(UserLogin userLogin)
     {
         return service.LoginUser(userLogin);
     }
 
-    [HttpGet("new-token")]
-    public ActionResult<Tuple<string, string>> GenerateNewToken(string refreshtoken)
+    [Authorize]
+    [HttpGet("refresh-token")]
+    public ActionResult<string> GenerateNewToken()
     {
-        return service.GenerateNewToken(refreshtoken);
+        return service.GenerateNewToken(HttpContext.User);
+    }
+
+    [HttpPost("reset-password")]
+    public ActionResult ResetPassword(string email)
+    {
+        return service.ResetPassword(email);
     }
 }

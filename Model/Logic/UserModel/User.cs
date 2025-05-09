@@ -15,4 +15,8 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     public Club RelatedTo { get; set; }
+
+    public String Token { get; set; }
+
+    public String RefreshToken { get; set; }
 }
