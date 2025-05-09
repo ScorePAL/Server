@@ -19,7 +19,16 @@ public interface ITeamService
     /// </summary>
     /// <param name="id">The team id</param>
     /// <returns>The team</returns>
-    public ActionResult<Team> GetTeam(long id);
+    public ActionResult<Team> GetTeam(string token, Team id);
+
+    /// <summary>
+    /// Create a team with the given name and club id
+    /// </summary>
+    /// <param name="token">The user's token</param>
+    /// <param name="name">The name of the team</param>
+    /// <param name="clubId">The id of the club</param>
+    /// <returns></returns>
+    public ActionResult CreateTeam(string token, string name, long clubId);
 
     /// <summary>
     /// Update a team with the given id

@@ -23,9 +23,10 @@ public class TeamService : ITeamService
         return dao.GetTeams(page, limit);
     }
 
-    public ActionResult<Team> GetTeam(long id)
+
+    public ActionResult<Team> GetTeam(string token, Team team)
     {
-        return dao.GetTeam(id);
+        return dao.GetTeam(token, team);
     }
 
     public ActionResult UpdateTeam(ClaimsPrincipal claims, long id, string name)

@@ -25,11 +25,16 @@ public class TeamController : ControllerBase
         return service.GetTeams(page, limit);
     }
 
-    [Authorize]
-    [HttpGet("{id}")]
-    public ActionResult<Team> GetTeam(long id)
+    [HttpPost("{id}")]
+    public ActionResult<Team> GetTeam(string token, Team team)
     {
-        return service.GetTeam(id);
+        return service.GetTeam(token, team);
+    }
+
+    [HttpPost("create")]
+    public ActionResult CreateTeam([FromBody] string token, string name, long clubId)
+    {
+        return service.CreateTeam(token, name, clubId);
     }
 
     [Authorize]

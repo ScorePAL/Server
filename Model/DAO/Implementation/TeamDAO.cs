@@ -43,25 +43,38 @@ public class TeamDAO : ITeamDAO
         return new OkObjectResult(teams);
     }
 
-    public ActionResult<Team> GetTeam(long id)
+
+    public ActionResult<Team> GetTeam(string token, Team team)
     {
-        Team team;
+        UserDAO userDao = new UserDAO();
+        ActionResult r = userDao.GetUserByToken(token);
+        if (r is not OkObjectResult user)
+        {
+            throw new InvalidTokenException(token);
+        }
+
+        if (user.Value == null)
+        {
+            throw new UndefinedUserException();
+        }
+
+        Team teamResult;
         using MySqlController conn = new MySqlController();
         var result = conn.ExecuteQuery(
             "SELECT team_id, t.name as 'TeamName', c.club_id, c.name, logo_url FROM teams t INNER JOIN clubs c on t.club_id = c.club_id WHERE team_id = @id",
             new Dictionary<string, object>
             {
-                { "@id", id }
+                { "@id", team.Id }
             });
 
         if (result.Rows.Count <= 0)
         {
-            throw new TeamNotFoundException(id);
+            throw new TeamNotFoundException(team.Id);
 
         }
 
         DataRow row = result.Rows[0];
-        team = new Team
+        teamResult = new Team
         {
             Id = Convert.ToInt32(row["team_id"]),
             Name = row["TeamName"].ToString() ?? "",
@@ -73,7 +86,7 @@ public class TeamDAO : ITeamDAO
             }
         };
 
-        return new OkObjectResult(team);
+        return new OkObjectResult(teamResult);
     }
 
     public ActionResult UpdateTeam(User user, long id, string name)
