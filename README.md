@@ -1,6 +1,6 @@
 ﻿<div style="text-align: center;">
 <h1>ScorePAL</h1>
-<img alt="ScorePAL" src="https://github.com/ScorePAL/App/blob/master/assets/images/scorepal/logo-inline.png" >
+<img alt="ScorePAL" src="https://raw.githubusercontent.com/ScorePAL/App/refs/heads/master/assets/images/scorepal/icon-inline.png" >
 <p>A mobile app to manage a football team and analyse their statistics</p>
 <a href="https://choosealicense.com/licenses/mit/"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-green.svg"></a>
 <a href="https://opensource.org/licenses/"><img alt="GPLv3 License" src="https://img.shields.io/badge/License-GPL%20v3-yellow.svg"></a>
