@@ -34,7 +34,8 @@ for path, methods in data["paths"].items():
             lines.append(f"|-----------|----------|")
             for param in details.get("parameters", []):
                 param_name = param.get("name", "")
-                param_type = param.get("type", "string")
+                schema = param.get("schema", {})
+                param_type = schema.get("type", "string")
                 lines.append(f"| {param_name} | {param_type} |")
 
         if body:

@@ -81,8 +81,8 @@ GET /api/match/all
 ```
 | Parameter | Type     | 
 |-----------|----------|
-| page | string |
-| limit | string |
+| page | integer |
+| limit | integer |
 ### Match-Create
 ```http
 POST /api/match/create
@@ -104,15 +104,15 @@ GET /sse
 ```
 | Parameter | Type     | 
 |-----------|----------|
-| clubId | string |
+| clubId | integer |
 ### Team-All
 ```http
 GET /api/team/all
 ```
 | Parameter | Type     | 
 |-----------|----------|
-| page | string |
-| limit | string |
+| page | integer |
+| limit | integer |
 ### Team-{id}
 ```http
 POST /api/team/{id}
