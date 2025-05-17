@@ -1,11 +1,13 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using ScorePALServer.Model.UserModel;
 using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServerService.Interfaces;
+using Shared.Configuration;
 
 namespace ScorePALServerService.Implementation;
 
@@ -13,18 +15,10 @@ public class TokenService : ITokenService
 {
     private readonly SigningCredentials credentials;
 
-    public TokenService()
+    public TokenService(IOptions<OAuthConfig> oauthOptions)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-                optional: true)
-            .AddEnvironmentVariables()
-            .Build();
-
         SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(configuration.GetSection("OAuth")["Key"]!)
+            Encoding.UTF8.GetBytes(oauthOptions.Value.Key)
         );
 
         credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
