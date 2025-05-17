@@ -7,15 +7,8 @@ using ScorePALServerService.Interfaces;
 namespace ScorePALServerController.Controllers;
 
 [Route("api/user")]
-public class UserController : ControllerBase
+public class UserController(IUserService service) : ControllerBase
 {
-    private readonly IUserService service;
-
-    public UserController(IUserService service)
-    {
-        this.service = service;
-    }
-
     [HttpPost("register")]
     public User RegisterUser(UserRegister userRegister)
     {

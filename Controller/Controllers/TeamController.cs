@@ -8,16 +8,9 @@ using ScorePALServerService.Interfaces;
 namespace ScorePALServerController.Controllers;
 
 [Route("/api/team")]
-public class TeamController : ControllerBase
+public class TeamController(ITeamService service, ITokenService tokenService) : ControllerBase
 {
-    private ITeamService service;
-    private ITokenService tokenService;
-
-    public TeamController(ITeamService service, ITokenService tokenService)
-    {
-        this.service = service;
-        this.tokenService = tokenService;
-    }
+    private ITokenService tokenService = tokenService;
 
     [Authorize]
     [HttpGet("all")]

@@ -9,22 +9,13 @@ using ScorePALServerService.Interfaces;
 namespace ScorePALServerController.Controllers;
 
 [Route("api/match")]
-public class MatchController : ControllerBase
+public class MatchController(IEventPublisher eventPublisher, IMatchService matchService) : ControllerBase
 {
-    private readonly IEventPublisher eventPublisher;
-    private readonly IMatchService service;
-
-    public MatchController(IEventPublisher eventPublisher, IMatchService matchService)
-    {
-        this.eventPublisher = eventPublisher;
-        service = matchService;
-    }
-
     [Authorize]
     [HttpPut("update-score/{matchId}")]
     public async Task<IActionResult> UpdateScore(Match match)
     {
-        var result = service.UpdateMatchScore(HttpContext.User, match);
+        var result = matchService.UpdateMatchScore(HttpContext.User, match);
         if (result is OkObjectResult)
         {
             var response = (OkObjectResult) result;
@@ -39,27 +30,27 @@ public class MatchController : ControllerBase
     [HttpPost("{matchId}")]
     public ActionResult<Match?> GetMatch(Match match)
     {
-        return service.GetMatch(HttpContext.User, match);
+        return matchService.GetMatch(HttpContext.User, match);
     }
 
     [Authorize]
     [HttpGet("all")]
     public ActionResult<Match[]> GetAllMatches(long page = 1, long limit = 10)
     {
-        return service.GetAllMatches(page, limit);
+        return matchService.GetAllMatches(page, limit);
     }
 
     [Authorize]
     [HttpPost("create")]
     public ActionResult<long> CreateMatch([FromBody] Match match)
     {
-        return service.CreateMatch(HttpContext.User, match);
+        return matchService.CreateMatch(HttpContext.User, match);
     }
 
     [Authorize]
     [HttpGet("club/{clubId}")]
     public ActionResult<Match[]> GetClubMatches(Club club)
     {
-        return service.GetClubMatches(club);
+        return matchService.GetClubMatches(club);
     }
 }
