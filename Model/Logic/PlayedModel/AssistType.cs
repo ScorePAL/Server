@@ -1,4 +1,4 @@
-namespace ScorePALServer.Model.PlayedModel;
+namespace ScorePALServerModel.Logic.PlayedModel;
 
 public enum AssistType
 {

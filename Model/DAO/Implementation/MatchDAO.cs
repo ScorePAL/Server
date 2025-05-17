@@ -7,8 +7,9 @@ using ScorePALServerModel.Exceptions.Team;
 using ScorePALServerModel.Exceptions.User;
 using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServerModel.Logic.MatchModel;
-using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
+using ScorePALServerModel.Logic.TeamModel;
+using ScorePALServerModel.Logic.UserModel;
 
 namespace ScorePALServerModel.DAO.Implementation;
 

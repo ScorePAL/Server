@@ -1,4 +1,6 @@
-namespace ScorePALServer.Model.PlayedModel;
+using ScorePALServer.Model.PlayedModel;
+
+namespace ScorePALServerModel.Logic.PlayedModel;
 
 public class Assist
 {

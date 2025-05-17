@@ -1,8 +1,7 @@
-using ScorePALServer.Model.MatchModel;
 using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServerModel.Logic.MatchModel;
 
-namespace ScorePALServer.Model.TeamModel;
+namespace ScorePALServerModel.Logic.TeamModel;
 
 public class Team
 {

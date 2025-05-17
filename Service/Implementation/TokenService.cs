@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using ScorePALServer.Model.UserModel;
 using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.UserModel;
 using ScorePALServerService.Interfaces;
 using Shared.Configuration;
 

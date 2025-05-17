@@ -1,4 +1,5 @@
 using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.UserModel;
 
 namespace ScorePALServer.Model.UserModel;
 

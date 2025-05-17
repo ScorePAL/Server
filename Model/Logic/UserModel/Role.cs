@@ -1,4 +1,4 @@
-namespace ScorePALServer.Model.UserModel;
+namespace ScorePALServerModel.Logic.UserModel;
 
 public enum Role
 {

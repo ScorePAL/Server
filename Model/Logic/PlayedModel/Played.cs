@@ -1,6 +1,6 @@
-using ScorePALServer.Model.MatchModel;
-using ScorePALServer.Model.PlayerModel;
 using ScorePALServerModel.Logic.MatchModel;
+using ScorePALServerModel.Logic.PlayedModel;
+using ScorePALServerModel.Logic.PlayerModel;
 
 namespace ScorePALServer.Model.PlayedModel;
 

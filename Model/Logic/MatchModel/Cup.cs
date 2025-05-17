@@ -1,6 +1,4 @@
-using ScorePALServerModel.Logic.MatchModel;
-
-namespace ScorePALServer.Model.MatchModel;
+namespace ScorePALServerModel.Logic.MatchModel;
 
 public class Cup
 {

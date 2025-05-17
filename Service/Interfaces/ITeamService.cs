@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using ScorePALServer.Model.TeamModel;
 using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.TeamModel;
 
 namespace ScorePALServerService.Interfaces;
 

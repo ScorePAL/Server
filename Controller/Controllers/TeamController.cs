@@ -1,8 +1,8 @@
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ScorePALServer.Model.TeamModel;
 using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.TeamModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerController.Controllers;

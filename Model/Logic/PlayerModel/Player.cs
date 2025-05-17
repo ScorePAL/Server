@@ -1,6 +1,6 @@
 using ScorePALServer.Model.PlayedModel;
 
-namespace ScorePALServer.Model.PlayerModel;
+namespace ScorePALServerModel.Logic.PlayerModel;
 
 public class Player
 {

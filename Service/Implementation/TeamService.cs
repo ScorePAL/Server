@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.DAO.Interfaces;
-using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
 using ScorePALServerModel.Logic.ClubModel;
+using ScorePALServerModel.Logic.TeamModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
