@@ -1,4 +1,4 @@
-name: Run Python Script on Master Commit
+name: Update README on master
 
 on:
   push:
@@ -6,21 +6,38 @@ on:
       - master
 
 jobs:
-  run-script:
+  update-readme:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.11
 
-      - name: Install dependencies
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build Docker image for API
+        run: docker build -t scorepal .
+
+      - name: Run API container
         run: |
-          pip install -r Workflow/requirements.txt
+          docker run -d --name scorepal_container -p 8080:8080 scorepal
+          echo "⏳ Attente que l'API soit prête..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/swagger/v1/swagger.json > /dev/null; then
+              echo "✅ API is ready!"
+              break
+            fi
+            sleep 2
+          done
 
-      - name: Run script
+      - name: Run update_readme.py
         run: python Workflow/update_readme.py
+
+      - name: Stop container
+        run: docker stop scorepal_container && docker rm scorepal_container
