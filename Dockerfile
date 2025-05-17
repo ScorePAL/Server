@@ -11,6 +11,7 @@ WORKDIR /src
 COPY ["Controller/Controller.csproj", "Controller/"]
 COPY ["Model/Model.csproj", "Model/"]
 COPY ["Service/Service.csproj", "Service/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
 COPY Server.sln .
 
 # Restore de la solution
