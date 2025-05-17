@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.Logic.MatchModel;
 using ScorePALServer.Model.UserModel;
+using ScorePALServerModel.Exceptions.Match;
+using ScorePALServerModel.Exceptions.Team;
+using ScorePALServerModel.Exceptions.User;
 using ScorePALServerModel.Logic.ClubModel;
 
 namespace ScorePALServerModel.DAO.Interfaces;
@@ -12,6 +15,7 @@ public interface IMatchDao
     /// </summary>
     /// <param name="user"></param>
     /// <param name="match"></param>
+    /// <exception cref="MatchNotFoundException"></exception>
     ActionResult UpdateMatchScore(User user, Match match);
 
     /// <summary>
@@ -19,6 +23,8 @@ public interface IMatchDao
     /// </summary>
     /// <param name="user"></param>
     /// <param name="match">The match id</param>
+    /// <exception cref="InvalidPermissionsException"></exception>
+    /// <exception cref="MatchNotFoundException"></exception>
     /// <returns>The match</returns>
     ActionResult<Match?> GetMatch(User user, Match match);
 
@@ -35,6 +41,8 @@ public interface IMatchDao
     /// </summary>
     /// <param name="user"></param>
     /// <param name="match"></param>
+    /// <exception cref="TeamNotFoundException"></exception>
+    /// <exception cref="InvalidPermissionsException"></exception>
     /// <returns></returns>
     ActionResult<long> CreateMatch(User user, Match match);
 
