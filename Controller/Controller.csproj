@@ -7,6 +7,7 @@
         <AssemblyName>ScorePALServerController</AssemblyName>
         <RootNamespace>ScorePALServerController</RootNamespace>
         <Company>ScorePAL</Company>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
