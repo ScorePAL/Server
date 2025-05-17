@@ -25,7 +25,7 @@ public class TeamController(ITeamService service, ITokenService tokenService) : 
     }
 
     [HttpPost("create")]
-    public Team CreateTeam(string name, Club club)
+    public Team CreateTeam(string name, [FromBody] Club club)
     {
         return service.CreateTeam(HttpContext.User, name, club);
     }
