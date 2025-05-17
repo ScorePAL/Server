@@ -8,6 +8,7 @@ using ScorePALServerModel.Exceptions;
 using ScorePALServerController.SSE;
 using ScorePALServerService.Implementation;
 using ScorePALServerService.Interfaces;
+using Shared.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
     .AddEnvironmentVariables()
     .Build();
+
+builder.Services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
+builder.Services.Configure<OAuthConfig>(configuration.GetSection("OAuth"));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme )
    .AddJwtBearer (o =>
@@ -51,6 +55,8 @@ builder.Services.AddScoped<IUserDAO, UserDAO>();
 
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ITeamDAO, TeamDAO>();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // SSE
 builder.Services.AddSingleton<IConnectionManager, ConnectionManager>();
