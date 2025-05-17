@@ -58,255 +58,107 @@ And voila your API is running in the background, you can manage it using Docker 
 - Match History
 - And much more
 
-
-#### MatchAllGet
-
+## API Routes
+### Match-Update-score
 ```http
-  GET /api/match/all
+PUT /api/match/update-score/{matchId}
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | - |
-| `page` | `Long` | - |
-| `limit` | `Long` | - |
-
-
-
-#### MatchClubClubIdGet
-
+| Parameter | Type     | 
+|-----------|----------|
+| matchId | string |
+| Body | Match |
+### Match-{matchid}
 ```http
-  GET /api/match/club/{clubId}
+POST /api/match/{matchId}
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `clubId` | `Long` | - |
-| `token` | `String` | - |
-
-
-
-#### MatchCreatePost
-
+| Parameter | Type     | 
+|-----------|----------|
+| matchId | string |
+| Body | Match |
+### Match-All
 ```http
-  POST /api/match/create
+GET /api/match/all
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `body` | `String(string)` | - |
-
-
-
-#### MatchMatchIdGet
-
+| Parameter | Type     | 
+|-----------|----------|
+| page | string |
+| limit | string |
+### Match-Create
 ```http
-  GET /api/match/{matchId}
+POST /api/match/create
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `matchId` | `Long` | - |
-| `token` | `String` | - |
-
-
-
-#### MatchUpdateScoreMatchIdPut
-
+| Parameter | Type     | 
+|-----------|----------|
+| Body | Match |
+### Match-Club
 ```http
-  PUT /api/match/update-score/{matchId}
+GET /api/match/club/{clubId}
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `matchId` | `Long` | - |
-| `body` | `String(string)` | - |
-| `scoreTeam1` | `Integer` | - |
-| `scoreTeam2` | `Integer` | - |
-
-
-
-#### 
-
+| Parameter | Type     | 
+|-----------|----------|
+| clubId | string |
+| Body | Club |
+### SSE
 ```http
-  GET /sse
+GET /sse
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `clubId` | `Long` | - |
-
-
-
-#### sseGet
-
+| Parameter | Type     | 
+|-----------|----------|
+| clubId | string |
+### Team-All
 ```http
-  GET /sse
+GET /api/team/all
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `clubId` | `Long` | - |
-
-
-
-#### 
-
+| Parameter | Type     | 
+|-----------|----------|
+| page | string |
+| limit | string |
+### Team-{id}
 ```http
-  GET /api/team/all
+POST /api/team/{id}
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | - |
-| `page` | `Long` | - |
-| `limit` | `Long` | - |
-
-
-
-#### TeamAllGet
-
+| Parameter | Type     | 
+|-----------|----------|
+| id | string |
+| Body | Team |
+### Team-Create
 ```http
-  GET /api/team/all
+POST /api/team/create
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | - |
-| `page` | `Long` | - |
-| `limit` | `Long` | - |
-
-
-
-#### TeamCreatePost
-
+| Parameter | Type     | 
+|-----------|----------|
+| name | string |
+| Body | Club |
+### Team-Update
 ```http
-  POST /api/team/create
+PUT /api/team/update/{id}
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `body` | `String(string)` | - |
-| `name` | `String` | - |
-| `clubId` | `Long` | - |
-
-
-
-#### TeamDeleteIdDelete
-
+| Parameter | Type     | 
+|-----------|----------|
+| id | string |
+| Body | Team |
+### User-Register
 ```http
-  DELETE /api/team/delete/{id}
+POST /api/user/register
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `id` | `Long` | - |
-| `token` | `String` | - |
-
-
-
-#### TeamIdGet
-
+| Parameter | Type     | 
+|-----------|----------|
+| Body | UserRegister |
+### User-Login
 ```http
-  GET /api/team/{id}
+POST /api/user/login
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `id` | `Long` | - |
-| `token` | `String` | - |
-
-
-
-#### TeamUpdateIdPut
-
+| Parameter | Type     | 
+|-----------|----------|
+| Body | UserLogin |
+### User-Refresh-token
 ```http
-  PUT /api/team/update/{id}
+GET /api/user/refresh-token
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `id` | `Long` | - |
-| `body` | `String(string)` | - |
-| `name` | `String` | - |
-
-
-
-#### 
-
+### User-Reset-password
 ```http
-  POST /api/user/login
+POST /api/user/reset-password
 ```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `body` | `String(string)` | - |
-| `email` | `String` | - |
-
-
-
-#### UserLoginPost
-
-```http
-  POST /api/user/login
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `body` | `String(string)` | - |
-| `email` | `String` | - |
-
-
-
-#### UserNewTokenGet
-
-```http
-  GET /api/user/new-token
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `refreshtoken` | `String` | - |
-
-
-
-#### UserRegisterPost
-
-```http
-  POST /api/user/register
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `body` | `String(string)` | - |
-| `firstName` | `String` | - |
-| `lastName` | `String` | - |
-| `email` | `String` | - |
-| `clubId` | `Long` | - |
-
-
-
-#### UserTokenGet
-
-```http
-  GET /api/user/{token}
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | - |
-
-
-
-
-## Feedback
-
-If you have any feedback, please reach me using discord: @casahxd
-
-## Contributors
-
-<a href="https://github.com/scorepal/app/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=scorepal/server" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
+| Parameter | Type     | 
+|-----------|----------|
+| Body | string |

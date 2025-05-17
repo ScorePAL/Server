@@ -24,13 +24,12 @@ jobs:
       - name: Build Docker image for API
         run: docker build -t scorepal .
 
-      - name: Run API container
+      - name: Wait for API to be ready
         run: |
-          docker run -d --name scorepal_container -p 8080:8080 scorepal
-          echo "⏳ Attente que l'API soit prête..."
+          echo "⏳ Waiting for the API to be ready..."
           for i in {1..30}; do
             if curl -s http://localhost:8080/swagger/v1/swagger.json > /dev/null; then
-              echo "✅ API is ready!"
+              echo "✅ API is up!"
               break
             fi
             sleep 2
