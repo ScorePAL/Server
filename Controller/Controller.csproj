@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Model\Model.csproj" />
       <ProjectReference Include="..\Service\Service.csproj" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>
