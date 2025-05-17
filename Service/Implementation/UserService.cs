@@ -10,17 +10,8 @@ using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
 
-public class UserService : IUserService
+public class UserService(IUserDAO dao, ITokenService tokenService) : IUserService
 {
-    private readonly IUserDAO dao;
-    private readonly ITokenService tokenService;
-
-    public UserService(IUserDAO dao, ITokenService tokenService)
-    {
-        this.dao = dao;
-        this.tokenService = tokenService;
-    }
-
     public User RegisterUser(UserRegister userRegister)
     {
         string salt = GenerateSalt();

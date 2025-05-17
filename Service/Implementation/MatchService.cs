@@ -8,17 +8,8 @@ using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
 
-public class MatchService : IMatchService
+public class MatchService(IMatchDao dao, ITokenService tokenService) : IMatchService
 {
-    private IMatchDao dao;
-    private ITokenService tokenService;
-
-    public MatchService(IMatchDao dao, ITokenService tokenService)
-    {
-        this.dao = dao;
-        this.tokenService = tokenService;
-    }
-
     public ActionResult UpdateMatchScore(ClaimsPrincipal claims, Match match)
     {
         User user = tokenService.ExtractUser(claims);
