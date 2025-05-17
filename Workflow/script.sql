@@ -1,5 +1,8 @@
 create schema if not exists ScorePAL;
 
+CREATE USER 'ScorePAL' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON ScorePAL.* TO 'ScorePAL';
+
 create table clubs
 (
     club_id  bigint auto_increment
