@@ -1,5 +1,6 @@
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Exceptions.Match;
 using ScorePALServerModel.Exceptions.Team;
@@ -13,11 +14,20 @@ namespace ScorePALServerModel.DAO.Implementation;
 
 public class MatchDAO : IMatchDao
 {
+    private readonly IServiceProvider provider;
+
+    public MatchDAO(IServiceProvider provider)
+    {
+        this.provider = provider;
+    }
+
     public ActionResult UpdateMatchScore(User user, Match match)
     {
         OkObjectResult clubs;
 
-        using MySqlController conn = new();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
             "SELECT t1.club_id as 't1.club_id', t2.club_id as 't2.club_id' " +
             "FROM `matches` m " +
@@ -46,7 +56,7 @@ public class MatchDAO : IMatchDao
         }
 
         conn.ExecuteQuery(
-            "UPDATE `match` SET score_team1 = @scoreTeam1, score_team2 = @scoreTeam2 WHERE match_id = @matchId",
+            "UPDATE `matches` SET score_team1 = @scoreTeam1, score_team2 = @scoreTeam2 WHERE match_id = @matchId",
             new Dictionary<string, object>
             {
                 { "@scoreTeam1", match.Score1 },
@@ -67,13 +77,14 @@ public class MatchDAO : IMatchDao
 
     public ActionResult<Match?> GetMatch(User user, Match match)
     {
-        using MySqlController conn = new();
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
-            "SELECT * FROM `match` m " +
-            "INNER JOIN team t1 on m.team1_id = t1.team_id " +
-            "INNER JOIN team t2 on m.team2_id = t2.team_id " +
-            "INNER JOIN club c1 on t1.club_id = c1.club_id " +
-            "INNER JOIN club c2 on t2.club_id = c2.club_id " +
+            "SELECT * FROM `matches` m " +
+            "INNER JOIN teams t1 on m.team1_id = t1.team_id " +
+            "INNER JOIN teams t2 on m.team2_id = t2.team_id " +
+            "INNER JOIN clubs c1 on t1.club_id = c1.club_id " +
+            "INNER JOIN clubs c2 on t2.club_id = c2.club_id " +
             "WHERE m.match_id = @matchId",
             new Dictionary<string, object>
             {
@@ -88,11 +99,10 @@ public class MatchDAO : IMatchDao
             throw new InvalidPermissionsException("Can't get match for this team");
         }
 
-            if (result.Rows.Count == 0)
-            {
-                throw new MatchNotFoundException(match.Id);
-
-            }
+        if (result.Rows.Count == 0)
+        {
+            throw new MatchNotFoundException(match.Id);
+        }
 
         Match matchResult = new Match
         {
@@ -132,7 +142,8 @@ public class MatchDAO : IMatchDao
     public ActionResult<Match[]> GetAllMatches(long page, long limit)
     {
         List<Match> matches = [];
-        using MySqlController conn = new();
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
             "SELECT * FROM matches m " +
             "INNER JOIN teams t1 on m.team1_id = t1.team_id " +
@@ -191,69 +202,71 @@ public class MatchDAO : IMatchDao
     public ActionResult<long> CreateMatch(User user, Match match)
     {
         long matchId;
-        using (MySqlController conn = new MySqlController())
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
+
+        bool canCreate = false;
+
+        var result = conn.ExecuteQuery(
+            "SELECT * FROM teams WHERE team_id = @teamId",
+            new Dictionary<string, object>
+            {
+                { "@teamId", match.Team1.Id }
+            }
+        );
+
+        if (result.Rows.Count == 0)
         {
-            bool canCreate = false;
-
-            var result = conn.ExecuteQuery(
-                "SELECT * FROM teams WHERE team_id = @teamId",
-                new Dictionary<string, object>
-                {
-                    { "@teamId", match.Team1.Id }
-                }
-            );
-
-            if (result.Rows.Count == 0)
-            {
-                throw new TeamNotFoundException(match.Team1.Id);
-            }
-
-            if (result.Rows[0]["club_id"].ToString() == user.RelatedTo.Id.ToString() || user.Role == Role.Admin)
-            {
-                canCreate = true;
-            }
-
-            result = conn.ExecuteQuery(
-                "SELECT * FROM teams WHERE team_id = @teamId",
-                new Dictionary<string, object>
-                {
-                    { "@teamId", match.Team2.Id }
-                }
-            );
-
-            if (result.Rows.Count == 0)
-            {
-                throw new TeamNotFoundException(match.Team2.Id);
-            }
-
-            if (result.Rows[0]["club_id"].ToString() == user.RelatedTo.Id.ToString() || user.Role == Role.Admin)
-            {
-                canCreate = true;
-            }
-
-            if (!canCreate)
-            {
-                throw new InvalidPermissionsException("Can't create match for this team");
-            }
-
-            matchId = conn.ExecuteInsert(
-                "INSERT INTO `matches` " +
-                "(team1_id, team2_id, date, address, coach, match_state, started_time, score_team1, score_team2) " +
-                "VALUES (@team1Id, @team2Id, @date, @address, @coach, @matchState, @startedTime, @scoreTeam1, @scoreTeam2)",
-                new Dictionary<string, object>
-                {
-                    { "@team1Id", match.Team1.Id },
-                    { "@team2Id", match.Team2.Id },
-                    { "@date", match.Date },
-                    { "@address", match.Address },
-                    { "@coach", match.Coach },
-                    { "@matchState", (int)match.State },
-                    { "@startedTime", match.StartedTime },
-                    { "@scoreTeam1", match.Score1 },
-                    { "@scoreTeam2", match.Score2 }
-                }
-            );
+            throw new TeamNotFoundException(match.Team1.Id);
         }
+
+        if (result.Rows[0]["club_id"].ToString() == user.RelatedTo.Id.ToString() || user.Role == Role.Admin)
+        {
+            canCreate = true;
+        }
+
+        result = conn.ExecuteQuery(
+            "SELECT * FROM teams WHERE team_id = @teamId",
+            new Dictionary<string, object>
+            {
+                { "@teamId", match.Team2.Id }
+            }
+        );
+
+        if (result.Rows.Count == 0)
+        {
+            throw new TeamNotFoundException(match.Team2.Id);
+        }
+
+        if (result.Rows[0]["club_id"].ToString() == user.RelatedTo.Id.ToString() || user.Role == Role.Admin)
+        {
+            canCreate = true;
+        }
+
+        if (!canCreate)
+        {
+            throw new InvalidPermissionsException("Can't create match for this team");
+        }
+
+        matchId = conn.ExecuteInsert(
+            "INSERT INTO `matches` " +
+            "(team1_id, team2_id, date, address, coach, match_state, started_time, score_team1, score_team2) " +
+            "VALUES (@team1Id, @team2Id, @date, @address, @coach, @matchState, @startedTime, @scoreTeam1, @scoreTeam2)",
+            new Dictionary<string, object>
+            {
+                { "@team1Id", match.Team1.Id },
+                { "@team2Id", match.Team2.Id },
+                { "@date", match.Date },
+                { "@address", match.Address },
+                { "@coach", match.Coach },
+                { "@matchState", (int)match.State },
+                { "@startedTime", match.StartedTime },
+                { "@scoreTeam1", match.Score1 },
+                { "@scoreTeam2", match.Score2 }
+            }
+        );
+
 
         return new OkObjectResult(matchId);
     }
@@ -261,13 +274,14 @@ public class MatchDAO : IMatchDao
     public ActionResult<Match[]> GetClubMatches(Club club)
     {
         List<Match> matches = new List<Match>();
-        using MySqlController conn = new MySqlController();
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
-            "SELECT DISTINCT(t1), DISTINCT(t2) FROM `match` m " +
-            "INNER JOIN team t1 on m.team1_id = t1.team_id " +
-            "INNER JOIN team t2 on m.team2_id = t2.team_id " +
-            "INNER JOIN club c1 on t1.club_id = c1.club_id " +
-            "INNER JOIN club c2 on t2.club_id = c2.club_id " +
+            "SELECT DISTINCT (m.team1_id, m.team2_id) FROM `matches` m " +
+            "INNER JOIN teams t1 on m.team1_id = t1.team_id " +
+            "INNER JOIN teams t2 on m.team2_id = t2.team_id " +
+            "INNER JOIN clubs c1 on t1.club_id = c1.club_id " +
+            "INNER JOIN clubs c2 on t2.club_id = c2.club_id " +
             "WHERE t1.club_id = @clubId OR t2.club_id = @clubId " +
             "ORDER BY m.date DESC",
             new Dictionary<string, object>

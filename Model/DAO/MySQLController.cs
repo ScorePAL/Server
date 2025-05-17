@@ -1,6 +1,8 @@
 using System.Data;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MySqlConnector;
+using Shared.Configuration;
 
 namespace ScorePALServerModel.DAO;
 
@@ -12,23 +14,16 @@ public class MySqlController : IDisposable
     /// <summary>
     /// Create a connection to the database
     /// </summary>
-    public MySqlController()
+    public MySqlController(IOptions<ConnectionStrings> connOptions)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory()) // racine du projet
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
-            .AddEnvironmentVariables()
-            .Build();
-
         string connectionString = new MySqlConnectionStringBuilder
         {
             // Utilisation du container pour facilement changer de bdd, pour le reste utiliser les variables d'environnement
             Server = Environment.GetEnvironmentVariable("DB_HOST"),
-            UserID = configuration.GetConnectionString("DB_USER"),
-            Password = configuration.GetConnectionString("DB_PASSWORD"),
-            Database = configuration.GetConnectionString("DB_NAME"),
-            Port = uint.Parse(configuration.GetConnectionString("DB_PORT") ?? throw new InvalidOperationException())
+            UserID = connOptions.Value.DB_USER,
+            Password = connOptions.Value.DB_PASSWORD,
+            Database = connOptions.Value.DB_NAME,
+            Port = uint.Parse(connOptions.Value.DB_PORT ?? throw new InvalidOperationException())
         }.ConnectionString;
 
         connection = new MySqlConnection(connectionString);

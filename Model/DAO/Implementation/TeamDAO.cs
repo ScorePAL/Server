@@ -1,24 +1,37 @@
 using System.Data;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Exceptions.Team;
 using ScorePALServerModel.Exceptions.User;
 using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
+using ScorePALServerModel.Exceptions.Club;
 
 namespace ScorePALServerModel.DAO.Implementation;
 
 public class TeamDAO : ITeamDAO
 {
-    public ActionResult<Team[]> GetTeams(long page, long limit)
+
+    private readonly IServiceProvider provider;
+    public TeamDAO(IServiceProvider provider)
+    {
+        this.provider = provider;
+    }
+
+    public Team[] GetTeams(long page, long limit)
     {
 
         List<Team> teams = new List<Team>();
 
-        using MySqlController conn = new MySqlController();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
-            "SELECT team_id, t.name, c.club_id, c.name, logo_url FROM teams t INNER JOIN clubs c on t.club_id = c.club_id LIMIT @limit OFFSET @offset",
+            "SELECT team_id, t.name, c.club_id, c.name, logo_url " +
+            "FROM teams t " +
+            "INNER JOIN clubs c on t.club_id = c.club_id " +
+            "LIMIT @limit OFFSET @offset",
             new Dictionary<string, object>
             {
                 { "@limit", limit },
@@ -40,28 +53,21 @@ public class TeamDAO : ITeamDAO
             });
         }
 
-        return new OkObjectResult(teams);
+        return teams.ToArray();
     }
 
 
-    public ActionResult<Team> GetTeam(string token, Team team)
+    public Team GetTeam(Team team)
     {
-        UserDAO userDao = new UserDAO();
-        ActionResult r = userDao.GetUserByToken(token);
-        if (r is not OkObjectResult user)
-        {
-            throw new InvalidTokenException(token);
-        }
-
-        if (user.Value == null)
-        {
-            throw new UndefinedUserException();
-        }
-
         Team teamResult;
-        using MySqlController conn = new MySqlController();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
-            "SELECT team_id, t.name as 'TeamName', c.club_id, c.name, logo_url FROM teams t INNER JOIN clubs c on t.club_id = c.club_id WHERE team_id = @id",
+            "SELECT team_id, t.name as 'TeamName', c.club_id, c.name, logo_url " +
+            "FROM teams t " +
+            "INNER JOIN clubs c on t.club_id = c.club_id " +
+            "WHERE team_id = @id",
             new Dictionary<string, object>
             {
                 { "@id", team.Id }
@@ -86,21 +92,50 @@ public class TeamDAO : ITeamDAO
             }
         };
 
-        return new OkObjectResult(teamResult);
+        return teamResult;
     }
 
-    public ActionResult UpdateTeam(User user, long id, string name)
+    public Team CreateTeam(string name, Club club)
     {
-        using MySqlController conn = new MySqlController();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
+        var result = conn.ExecuteQuery("SELECT club_id FROM clubs WHERE club_id = @id",
+            new Dictionary<string, object>
+            {
+                { "@id", club.Id }
+            });
+
+        if (result.Rows.Count == 0) throw new ClubNotFoundException(club.Id);
+
+        conn.ExecuteQuery("INSERT INTO teams (name, club_id) VALUES (@name, @clubId)",
+            new Dictionary<string, object>
+            {
+                { "@name", name },
+                { "@clubId", club.Id }
+            });
+
+        return new Team
+        {
+            Name = name,
+            Club = club
+        };
+    }
+
+    public Team UpdateTeam(User user, Team team)
+    {
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery("SELECT club_id FROM teams WHERE team_id = @id",
             new Dictionary<string, object>
             {
-                { "@id", id }
+                { "@id", team.Id }
             });
 
         if (result.Rows.Count == 0)
         {
-            throw new TeamNotFoundException(id);
+            throw new TeamNotFoundException(team.Id);
         }
 
         DataRow row = result.Rows[0];
@@ -112,10 +147,10 @@ public class TeamDAO : ITeamDAO
         conn.ExecuteQuery("UPDATE teams SET name = @name WHERE team_id = @id",
             new Dictionary<string, object>
             {
-                { "@name", name },
-                { "@id", id }
+                { "@name", team.Name },
+                { "@id", team.Id }
             });
 
-        return new OkResult();
+        return team;
     }
 }

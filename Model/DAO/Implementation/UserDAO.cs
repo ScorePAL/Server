@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Exceptions.User;
@@ -13,11 +14,21 @@ namespace ScorePALServerModel.DAO.Implementation;
 
 public class UserDAO : IUserDAO
 {
+
+    private readonly IServiceProvider provider;
+
+    public UserDAO(IServiceProvider provider)
+    {
+        this.provider = provider;
+    }
+
     public User RegisterUser(UserRegister userRegister, string salt)
     {
-        using var conn = new MySqlController();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
-            "SELECT * FROM user_authentification WHERE email = @email",
+            "SELECT * FROM users_auth WHERE email = @email",
             new Dictionary<string, object>
             {
                 { "@email", userRegister.Email }
@@ -30,7 +41,8 @@ public class UserDAO : IUserDAO
         }
 
         long userId = conn.ExecuteInsert(
-            "INSERT INTO users (first_name, last_name, role, created_at, related_to) VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
+            "INSERT INTO users (first_name, last_name, role, created_at, club) " +
+            "VALUES (@firstName, @lastName, @role, @createdAt, @relatedTo)",
             new Dictionary<string, object>
             {
                 { "@firstName", userRegister.FirstName },
@@ -41,7 +53,8 @@ public class UserDAO : IUserDAO
             }
         );
 
-        conn.ExecuteInsert("INSERT INTO user_authentification (user_id, email, password, salt) VALUES (@id, @email, @password, @salt)",
+        conn.ExecuteInsert("INSERT INTO users_auth (user_id, email, password, salt) " +
+                           "VALUES (@id, @email, @password, @salt)",
             new Dictionary<string, object>
             {
                 { "@id", userId },
@@ -69,7 +82,9 @@ public class UserDAO : IUserDAO
 
     public User LoginUser(UserLogin userLogin)
     {
-        using var conn = new MySqlController();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
             "SELECT UA.user_id, password, salt, first_name, last_name, role, created_at, club, name, logo_url " +
             "FROM users_auth UA " +
@@ -113,7 +128,9 @@ public class UserDAO : IUserDAO
     {
         string salt = "";
 
-        using var conn = new MySqlController();
+
+        using var scope = provider.CreateScope();
+        var conn = scope.ServiceProvider.GetRequiredService<MySqlController>();
         var result = conn.ExecuteQuery(
             "SELECT salt FROM users_auth WHERE email = @email",
             new Dictionary<string, object>
