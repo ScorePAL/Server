@@ -3,35 +3,35 @@ using Microsoft.AspNetCore.Mvc;
 using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServer.Model.TeamModel;
 using ScorePALServer.Model.UserModel;
+using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
 
-public class TeamService : ITeamService
+public class TeamService(ITeamDAO dao, ITokenService tokenService) : ITeamService
 {
-    private ITeamDAO dao;
-    private ITokenService tokenService;
-
-    public TeamService(ITeamDAO dao, ITokenService tokenService)
+    public Team[] GetTeams(ClaimsPrincipal claims, long page, long limit)
     {
-        this.dao = dao;
-        this.tokenService = tokenService;
-    }
-
-    public ActionResult<Team[]> GetTeams(long page, long limit)
-    {
+        tokenService.CheckIfUserIsAdmin(claims);
         return dao.GetTeams(page, limit);
     }
 
 
-    public ActionResult<Team> GetTeam(string token, Team team)
+    public Team GetTeam(Team team)
     {
-        return dao.GetTeam(token, team);
+        return dao.GetTeam(team);
     }
 
-    public ActionResult UpdateTeam(ClaimsPrincipal claims, long id, string name)
+    public Team CreateTeam(ClaimsPrincipal claims, string name, Club club)
+    {
+        tokenService.CheckIfUserIsAdminStaffOrCoach(claims);
+        return dao.CreateTeam(name, club);
+    }
+
+    public Team UpdateTeam(ClaimsPrincipal claims, Team team)
     {
         User user = tokenService.ExtractUser(claims);
-        return dao.UpdateTeam(user, id, name);
+        tokenService.CheckIfUserIsAdminStaffOrCoach(claims);
+        return dao.UpdateTeam(user, team);
     }
 }
