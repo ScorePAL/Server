@@ -45,7 +45,7 @@ docker network create -d bridge web
 cd ..
 
 # Run the container
-docker-compose -f compose.yml up
+docker-compose -f compose.yml up -d
 ```
 
 And voila your API is running in the background, you can manage it using Docker Desktop
