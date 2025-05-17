@@ -6,6 +6,7 @@ using ScorePALServerModel.DAO.Interfaces;
 using ScorePALServerModel.Logic.UserModel;
 using Org.BouncyCastle.Security;
 using ScorePALServer.Model.UserModel;
+using ScorePALServerModel.Exceptions.User;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerService.Implementation;
@@ -30,13 +31,13 @@ public class UserService(IUserDAO dao, ITokenService tokenService) : IUserServic
         return user;
     }
 
-    public ActionResult<User> LoginUser(UserLogin userLogin)
+    public User LoginUser(UserLogin userLogin)
     {
         string salt = dao.GetSaltByUser(userLogin.Email);
 
         if (salt == "")
         {
-            return new BadRequestResult();
+            throw new UserNotFoundException(userLogin.Email);
         }
 
         var hashedPassword = HashPassword(userLogin.Password, salt);

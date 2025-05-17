@@ -16,7 +16,7 @@ public class UserController(IUserService service) : ControllerBase
     }
 
     [HttpPost("login")]
-    public ActionResult<User> LoginUser(UserLogin userLogin)
+    public User LoginUser(UserLogin userLogin)
     {
         return service.LoginUser(userLogin);
     }

@@ -19,7 +19,7 @@ public interface IUserService
     /// </summary>
     /// <param name="userLogin">Contains the email and the password of the client trying to connect</param>
     /// <returns></returns>
-    public ActionResult<User> LoginUser(UserLogin userLogin);
+    public User LoginUser(UserLogin userLogin);
 
     /// <summary>
     /// Generate a new token for the user
