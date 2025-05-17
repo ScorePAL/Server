@@ -1,6 +1,8 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScorePALServer.Model.TeamModel;
+using ScorePALServerModel.Logic.ClubModel;
 using ScorePALServerService.Interfaces;
 
 namespace ScorePALServerController.Controllers;
@@ -19,29 +21,28 @@ public class TeamController : ControllerBase
 
     [Authorize]
     [HttpGet("all")]
-    public ActionResult<Team[]> GetTeams(long page, long limit)
+    public Team[] GetTeams(long page, long limit)
     {
-        tokenService.CheckIfUserIsAdmin(HttpContext.User);
-        return service.GetTeams(page, limit);
+        return service.GetTeams(HttpContext.User, page, limit);
     }
 
+    [Authorize]
     [HttpPost("{id}")]
-    public ActionResult<Team> GetTeam(string token, Team team)
+    public Team GetTeam(Team team)
     {
-        return service.GetTeam(token, team);
+        return service.GetTeam(team);
     }
 
     [HttpPost("create")]
-    public ActionResult CreateTeam([FromBody] string token, string name, long clubId)
+    public Team CreateTeam(string name, Club club)
     {
-        return service.CreateTeam(token, name, clubId);
+        return service.CreateTeam(HttpContext.User, name, club);
     }
 
     [Authorize]
     [HttpPut("update/{id}")]
-    public ActionResult UpdateTeam([FromBody] long id, string name)
+    public Team UpdateTeam([FromBody] Team team)
     {
-        tokenService.CheckIfUserIsAdminStaffOrCoach(HttpContext.User);
-        return service.UpdateTeam(HttpContext.User, id, name);
+        return service.UpdateTeam(HttpContext.User, team);
     }
 }
