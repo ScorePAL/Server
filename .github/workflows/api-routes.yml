@@ -1,0 +1,26 @@
+name: Run Python Script on Master Commit
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r Workflow/requirements.txt
+
+      - name: Run script
+        run: python Workflow/update_readme.py
