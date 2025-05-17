@@ -10,8 +10,6 @@ namespace ScorePALServerController.Controllers;
 [Route("/api/team")]
 public class TeamController(ITeamService service, ITokenService tokenService) : ControllerBase
 {
-    private ITokenService tokenService = tokenService;
-
     [Authorize]
     [HttpGet("all")]
     public Team[] GetTeams(long page, long limit)
@@ -21,7 +19,7 @@ public class TeamController(ITeamService service, ITokenService tokenService) : 
 
     [Authorize]
     [HttpPost("{id}")]
-    public Team GetTeam(Team team)
+    public Team GetTeam([FromBody] Team team)
     {
         return service.GetTeam(team);
     }

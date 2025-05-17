@@ -10,13 +10,13 @@ namespace ScorePALServerController.Controllers;
 public class UserController(IUserService service) : ControllerBase
 {
     [HttpPost("register")]
-    public User RegisterUser(UserRegister userRegister)
+    public User RegisterUser([FromBody] UserRegister userRegister)
     {
         return service.RegisterUser(userRegister);
     }
 
     [HttpPost("login")]
-    public User LoginUser(UserLogin userLogin)
+    public User LoginUser([FromBody] UserLogin userLogin)
     {
         return service.LoginUser(userLogin);
     }
@@ -29,7 +29,7 @@ public class UserController(IUserService service) : ControllerBase
     }
 
     [HttpPost("reset-password")]
-    public ActionResult ResetPassword(string email)
+    public ActionResult ResetPassword([FromBody] string email)
     {
         return service.ResetPassword(email);
     }

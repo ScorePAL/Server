@@ -13,7 +13,7 @@ public class MatchController(IEventPublisher eventPublisher, IMatchService match
 {
     [Authorize]
     [HttpPut("update-score/{matchId}")]
-    public async Task<IActionResult> UpdateScore(Match match)
+    public async Task<IActionResult> UpdateScore([FromBody] Match match)
     {
         var result = matchService.UpdateMatchScore(HttpContext.User, match);
         if (result is OkObjectResult)
@@ -28,7 +28,7 @@ public class MatchController(IEventPublisher eventPublisher, IMatchService match
 
     [Authorize]
     [HttpPost("{matchId}")]
-    public ActionResult<Match?> GetMatch(Match match)
+    public ActionResult<Match?> GetMatch([FromBody] Match match)
     {
         return matchService.GetMatch(HttpContext.User, match);
     }
@@ -49,7 +49,7 @@ public class MatchController(IEventPublisher eventPublisher, IMatchService match
 
     [Authorize]
     [HttpGet("club/{clubId}")]
-    public ActionResult<Match[]> GetClubMatches(Club club)
+    public ActionResult<Match[]> GetClubMatches([FromBody] Club club)
     {
         return matchService.GetClubMatches(club);
     }
