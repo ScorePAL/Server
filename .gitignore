@@ -8,3 +8,5 @@ riderModule.iml
 
 ./Server/appsettings.json
 ./Server/appsettings.Development.json
+
+./logs
