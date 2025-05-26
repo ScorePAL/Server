@@ -24,6 +24,10 @@ jobs:
       - name: Build Docker image for API
         run: docker build -t scorepal .
 
+      - name: Run Docker container
+        run: |
+            docker run -d --name scorepal_container -p 8080:80 scorepal
+
       - name: Wait for API to be ready
         run: |
           echo "⏳ Waiting for the API to be ready..."
