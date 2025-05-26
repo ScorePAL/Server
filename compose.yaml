@@ -12,6 +12,8 @@
       - "8080:8080"
     environment:
       - DB_HOST=db
+    volumes:
+      - ./logs:/app/logs
 
   db:
     image: mysql
