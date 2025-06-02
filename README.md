@@ -9,7 +9,7 @@
 
 ## Tech Stack
 
-ASP.Net (dotNet 8)
+ASP.Net (dotNet 9)
 
 ## Installation
 
